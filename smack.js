@@ -11,6 +11,7 @@ pop.innerHTML=`
     <label class="opt" name="bar"><input type="checkbox">bluebar</label>
     <label class="opt" name="search"><input type="checkbox">search bar</label>
     <label class="opt" name="tab"><input type="checkbox">chat tab</label>
+    <label class="opt" name="sidebar"><input type="checkbox">sidebar</label>
     <button class="done">done</button>
 `;
 let s=document.createElement('style');
@@ -54,7 +55,8 @@ document.querySelector('#smack_popup button.done').onclick=function(){
         "#pagelet_dock>._2xwp",
         "#bluebarRoot>div[role='banner']",
         "div[role='search'][data-testid='facebar_root']",
-        "#pagelet_dock>.fbDockWrapperRight"
+        "#pagelet_dock>.fbDockWrapperRight",
+        "#pagelet_sidebar",
     ];
     if(!v.length)
         return;
@@ -84,6 +86,11 @@ document.querySelector('#smack_popup button.done').onclick=function(){
         let ct=document.querySelector(css[5]);
         if(ct)
             ct.remove();
+    }
+    if(v[6].checked){
+        let sb=document.querySelector(css[6]);
+        if(sb)
+            sb.remove();
     }
     pop.remove();
 };
