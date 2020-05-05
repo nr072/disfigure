@@ -2,7 +2,19 @@
 
 let site = location.host;
 
-if (site === "www.facebook.com") {
+
+
+(function () {
+    if (site === "www.facebook.com") {
+        disfigure_facebook();
+    } else if (site === "www.youtube.com") {
+        disfigure_youtube();
+    }
+})();
+
+
+
+function disfigure_facebook() {
 
     if (document.getElementById('disfg_popup')) {
         console.log('Pop-up exists or same "id" in use!');
@@ -116,7 +128,7 @@ if (site === "www.facebook.com") {
 
 }
 
-else if (site === "www.youtube.com") {
+function disfigure_youtube() {
 
     // Remove pop-up container
     document.querySelectorAll('ytd-popup-container').style.display = 'none';
