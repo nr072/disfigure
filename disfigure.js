@@ -100,3 +100,10 @@ if (site=="www.facebook.com") {
     };
 
 }
+
+else if (site=="www.youtube.com") {
+
+    // Remove pop-up container
+    document.querySelectorAll('ytd-popup-container').style.display = 'none';
+
+}
