@@ -2,15 +2,16 @@
 
 let site = location.host;
 
-if (site=="www.facebook.com") {
+if (site === "www.facebook.com") {
 
-    if(document.getElementById('smack_popup')){
-        console.log('Same "id" in use!');
+    if (document.getElementById('disfg_popup')) {
+        console.log('Pop-up exists or same "id" in use!');
         return;
     }
-    let pop=document.createElement('div');
-    pop.id="smack_popup";
-    pop.innerHTML=`
+
+    let popup = document.createElement('div');
+    popup.id = "disfg_popup";
+    popup.innerHTML = `
         <label class="opt" name="all"><input type="checkbox">all</label>
         <label class="opt" name="jewel"><input type="checkbox">notif_jewel</label>
         <label class="opt" name="card"><input type="checkbox">notif_card</label>
@@ -20,42 +21,54 @@ if (site=="www.facebook.com") {
         <label class="opt" name="sidebar"><input type="checkbox">sidebar</label>
         <button class="done">done</button>
     `;
-    let s=document.createElement('style');
-    s.innerHTML=`
-        #smack_popup{
-            width:150px;
-            background-color:#fff;
-            box-shadow:0 0 7px 2px #aaa;
-            padding:20px;
-            position:fixed;
-            top:50%;
-            left:50%;
-            transform:translate(-50%,-50%);
-            z-index:9999
+
+    let css = document.createElement('style');
+    css.innerHTML = `
+        #disfg_popup {
+            width: 150px;
+            background-color: #fff;
+            box-shadow: 0 0 7px 2px #aaa;
+            padding: 20px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            z-index: 9999
         }
-        #smack_popup>*{
-            padding:0.25rem 1rem;
-            display:block;
-            width:100%;
+        #disfg_popup > * {
+            padding: 0.25rem 1rem;
+            display: block;
+            width: 100%;
         }
-        #smack_popup input[type="checkbox"]{
-            vertical-align:middle;
+        #disfg_popup input[type="checkbox"] {
+            vertical-align: middle;
         }
-        #smack_popup button.done{
-            margin:1rem auto .5rem;
+        #disfg_popup button.done {
+            margin: 1rem auto .5rem;
         }
     `;
-    document.body.appendChild(s);
-    document.body.appendChild(pop);
-    document.querySelector('#smack_popup label[name="all"]>input[type="checkbox"]').onchange=function(e){
-        let cb=document.querySelectorAll('#smack_popup label>input[type="checkbox"]');
-        for(let c=1;c<cb.length;++c){
-            cb[c].checked=e.target.checked;
+
+    document.body.appendChild(css);
+    document.body.appendChild(popup);
+
+    const slct_allOption = "#disfg_popup label[name='all'] > input[type='checkbox']";
+    const slct_checkbox = "#disfg_popup label > input[type='checkbox']";
+
+    // Check all options if the "all" option is checked. Uncheck all if "all"
+    // is unchecked.
+    document.querySelector(slct_allOption).onchange = function (e) {
+        let cb = document.querySelectorAll(slct_checkbox);
+        for(let i = 1; i < cb.length; ++i) {
+            cb[i].checked = e.target.checked;
         }
     };
-    document.querySelector('#smack_popup button.done').onclick=function(){
-        let v=document.querySelectorAll('#smack_popup input[type="checkbox"]');
-        let css=[
+
+    // When the "done" button is clicked, remove selected elements/parts of
+    // the page, and close pop-up.
+    document.querySelector('#disfg_popup button.done').onclick = function () {
+
+        let checks = document.querySelectorAll(slct_checkbox);
+        let selectors = [
             "",
             "#fbNotificationsJewel",
             "#pagelet_dock>._2xwp",
@@ -64,46 +77,46 @@ if (site=="www.facebook.com") {
             "#pagelet_dock>.fbDockWrapperRight",
             "#pagelet_sidebar",
         ];
-        if(!v.length)
+
+        if (!checks.length) {
             return;
-        if(v[1].checked){
-            let nj=document.querySelector(css[1]);
-            if(nj)
-                nj.remove();
         }
-        if(v[2].checked){
-            let nc=document.querySelector(css[2]);
-            if(nc)
-                nc.remove();
+
+        if (checks[1].checked) {
+            let nj = document.querySelector(selectors[1]);
+            nj && nj.remove();
         }
-        if(v[3].checked){
-            let bb=document.querySelector(css[3]);
-            if(bb){
-                bb.style.background="none";
-                bb.style.borderBottom="none";
+        if (checks[2].checked) {
+            let nc = document.querySelector(selectors[2]);
+            nc && nc.remove();
+        }
+        if (checks[3].checked) {
+            let bb = document.querySelector(selectors[3]);
+            if (bb) {
+                bb.style.background = "none";
+                bb.style.borderBottom = "none";
             }
         }
-        if(v[4].checked){
-            let sb=document.querySelector(css[4]);
-            if(sb)
-                sb.remove();
+        if (checks[4].checked) {
+            let sb = document.querySelector(selectors[4]);
+            sb && sb.remove();
         }
-        if(v[5].checked){
-            let ct=document.querySelector(css[5]);
-            if(ct)
-                ct.remove();
+        if (checks[5].checked) {
+            let ct = document.querySelector(selectors[5]);
+            ct && ct.remove();
         }
-        if(v[6].checked){
-            let sb=document.querySelector(css[6]);
-            if(sb)
-                sb.remove();
+        if (checks[6].checked) {
+            let sb = document.querySelector(selectors[6]);
+            sb && sb.remove();
         }
-        pop.remove();
+
+        popup.remove();
+
     };
 
 }
 
-else if (site=="www.youtube.com") {
+else if (site === "www.youtube.com") {
 
     // Remove pop-up container
     document.querySelectorAll('ytd-popup-container').style.display = 'none';
