@@ -1,3 +1,5 @@
+"use strict";
+
 let site = location.host;
 
 if (site=="www.facebook.com") {
