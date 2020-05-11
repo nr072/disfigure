@@ -210,7 +210,8 @@ function remove_elements() {
 
         const el = document.querySelector(sList[i]);
         if (!el) {
-            logMessage = "Element not found: " + dsfg.facebook.options[i].text;
+            const msg = "Element not found: " + dsfg.facebook.options[i].text;
+            logMessage = logMessage || msg;
         }
 
         switch (i) {
