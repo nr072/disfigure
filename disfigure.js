@@ -1,132 +1,283 @@
 "use strict";
 
-let site = location.host;
+const site = location.host;
+
+const dsfg = {
+    facebook: {
+        options: [
+            {
+                text: "All",
+                input_id: "opt_all",
+                selector: "",
+            }, {
+                text: "Notification jewel",
+                input_id: "opt_jewel",
+                selector: "#fbNotificationsJewel",
+            }, {
+                text: "Notification card",
+                input_id: "opt_card",
+                selector: "#pagelet_dock > ._2xwp",
+            }, {
+                text: "Bluebar",
+                input_id: "opt_bar",
+                selector: "#bluebarRoot > div[role='banner']",
+            }, {
+                text: "Bluebar search box",
+                input_id: "opt_search",
+                selector: "div[role='search'][data-testid='facebar_root']",
+            }, {
+                text: "Chat tabs",
+                input_id: "opt_chTabs",
+                selector: "#pagelet_dock > .fbDockWrapperRight",
+            }, {
+                text: "Sidebar",
+                input_id: "opt_sidebar",
+                selector: "#pagelet_sidebar",
+            },
+        ],
+    },
+};
 
 
 
-(function () {
-    if (site === "www.facebook.com") {
-        disfigure_facebook();
-    } else if (site === "www.youtube.com") {
-        disfigure_youtube();
+if (site === "www.facebook.com") {
+    disfigure_facebook();
+} else if (site === "www.youtube.com") {
+    disfigure_youtube();
+}
+
+
+
+function create_option({input_id, text}) {
+
+    let row = document.createElement("div"),
+        label = document.createElement("label"),
+        cb = document.createElement("input");
+
+    label.className = "opt";
+    label.innerText = text;
+    label.setAttribute("for", input_id);
+
+    cb.type = "checkbox";
+    cb.id = input_id;
+    cb.className = "cb";
+
+    row.className = "row";
+    row.appendChild(cb);
+    row.appendChild(label);
+
+    return row;
+
+}
+
+
+
+// For "done" button, and other potential options in future.
+function create_special_row(name, text) {
+    const row = document.createElement("div");
+    if (name === "done") {
+        row.id = "doneBtn";
     }
-})();
+    row.className =
+        name === "done" ? "row done"
+        : "row";
+    row.innerText = text;
+    return row;
+}
+
+
+
+// Create the pop-up, add options, and add CSS to page's HTML.
+function make_popup() {
+
+    let logMessage = "";
+
+    const popup = document.createElement("div");
+    popup.id = "dsfg_popup";
+    popup.className = "dsfg-popup";
+
+    const optCont = document.createElement("div");
+    optCont.className = "opt-cont";
+    popup.appendChild(optCont);
+
+    const doneButton = create_special_row("done", "Done");
+    popup.appendChild(doneButton);
+
+    const options = site === "www.facebook.com"
+            ? dsfg.facebook.options
+            : site === "www.youtube.com"
+                ? dsfg.youtube.options
+                : null;
+
+    if (options.length < 1) {
+        logMessage = "Error: No option found!";
+    }
+
+    // Create the options (removable part/element names).
+    for (let i = 0; i < options.length; ++i) {
+        optCont.appendChild(create_option({
+            text: options[i].text,
+            input_id: options[i].input_id,
+        }));
+    }
+
+    document.body.appendChild(popup);
+
+    const css = document.createElement("style");
+    if (site === "www.facebook.com") {
+        css.innerHTML = `
+            .dsfg-popup {
+                background-color: #fff;
+                box-shadow: 0 0 1px 1px #ccc;
+                height: 280px;
+                left: 50%;
+                position: fixed;
+                top: 50%;
+                transform: translate(-50%,-50%);
+                width: 180px;
+                z-index: 9999;
+            }
+            .dsfg-popup .row,
+            .dsfg-popup .opt {
+                color: #777;
+                text-align: center;
+            }
+            .dsfg-popup .opt {
+                display: block;
+                padding: 0.5em 1em;
+            }
+            .dsfg-popup .row:hover,
+            .dsfg-popup .opt:hover {
+                background-color: rgba(230, 230, 230, 0.7);
+                cursor: pointer;
+            }
+            .dsfg-popup .row.done {
+                font-variant: all-small-caps;
+                font-weight: bold;
+                height: 40px;
+                line-height: 40px;
+                padding: 0;
+            }
+            .dsfg-popup .opt-cont {
+                height: 200px;
+                overflow-x: hidden;
+                overflow-y: auto;
+                padding: 20px 0;
+            }
+            .dsfg-popup input.cb {
+                display: none;
+            }
+            .dsfg-popup .opt {
+                font-weight: normal;
+                padding: 0.5em 1em;
+                text-align: center;
+            }
+            .dsfg-popup input.cb:checked + .opt {
+                background-color: rgba(230, 230, 230, 0.7);
+            }
+        `;
+    }
+    document.head.appendChild(css);
+
+    return logMessage;
+
+}
+
+
+
+// Remove parts/elements from page based on selected options.
+function remove_elements() {
+
+    let logMessage = "";
+
+    let cbList = document.querySelectorAll(".dsfg-popup input.cb"),
+        sList = dsfg.facebook.options.map(function (opt) {
+            return opt.selector;
+        });
+
+    if (!cbList.length) {
+        logMessage = "Error: Checkboxes not found!";
+        return logMessage;
+    }
+
+    // Remove elements corresponding to checkboxes, but skipping the "all".
+    for (let i = 1; i < cbList.length; ++i) {
+
+        // Skip if option not selected.
+        if (!cbList[i].checked) {
+            continue;
+        }
+
+        const el = document.querySelector(sList[i]);
+        if (!el) {
+            logMessage = "Element not found: " + dsfg.facebook.options[i].text;
+        }
+
+        switch (i) {
+            case 1:
+            case 2:
+            case 4:
+            case 5:
+            case 6:
+                el && el.remove();
+                break;
+            case 3:
+                if (el) {
+                    el.style.background = "none";
+                    el.style.borderBottom = "none";
+                }
+                break;
+        }
+
+    }
+
+    return logMessage;
+
+}
 
 
 
 function disfigure_facebook() {
 
-    if (document.getElementById('disfg_popup')) {
+    // To show error or log-like messages to user in console.
+    let logMessage = "";
+
+    if (document.getElementById('dsfg_popup')) {
         console.log('Pop-up exists or same "id" in use!');
         return;
     }
 
-    let popup = document.createElement('div');
-    popup.id = "disfg_popup";
-    popup.innerHTML = `
-        <label class="opt" name="all"><input type="checkbox">all</label>
-        <label class="opt" name="jewel"><input type="checkbox">notif_jewel</label>
-        <label class="opt" name="card"><input type="checkbox">notif_card</label>
-        <label class="opt" name="bar"><input type="checkbox">bluebar</label>
-        <label class="opt" name="search"><input type="checkbox">search bar</label>
-        <label class="opt" name="tab"><input type="checkbox">chat tab</label>
-        <label class="opt" name="sidebar"><input type="checkbox">sidebar</label>
-        <button class="done">done</button>
-    `;
+    // Create pop-up and fill with site-specific options.
+    logMessage = make_popup();
 
-    let css = document.createElement('style');
-    css.innerHTML = `
-        #disfg_popup {
-            width: 150px;
-            background-color: #fff;
-            box-shadow: 0 0 7px 2px #aaa;
-            padding: 20px;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%,-50%);
-            z-index: 9999
-        }
-        #disfg_popup > * {
-            padding: 0.25rem 1rem;
-            display: block;
-            width: 100%;
-        }
-        #disfg_popup input[type="checkbox"] {
-            vertical-align: middle;
-        }
-        #disfg_popup button.done {
-            margin: 1rem auto .5rem;
-        }
-    `;
+    const popup = document.getElementById("dsfg_popup");
+    if (!popup) {
+        console.log(logMessage || "Error: Something unexpected happened!");
+        return;
+    }
 
-    document.body.appendChild(css);
-    document.body.appendChild(popup);
+    // Select all options if the "all" option is selected.
+    const allOpt = document.getElementById("opt_all");
+    allOpt.addEventListener("change", function (e) {
+        let cbList = document.querySelectorAll(".dsfg-popup input.cb");
+        for(let i = 1; i < cbList.length; ++i) {
+            cbList[i].checked = e.target.checked;
+        }
+    });
 
-    const slct_allOption = "#disfg_popup label[name='all'] > input[type='checkbox']";
-    const slct_checkbox = "#disfg_popup label > input[type='checkbox']";
-
-    // Check all options if the "all" option is checked. Uncheck all if "all"
-    // is unchecked.
-    document.querySelector(slct_allOption).onchange = function (e) {
-        let cb = document.querySelectorAll(slct_checkbox);
-        for(let i = 1; i < cb.length; ++i) {
-            cb[i].checked = e.target.checked;
+    // Remove if options are selected, and close pop-up.
+    const doneBtn = document.getElementById("doneBtn");
+    doneBtn.addEventListener("click", function () {
+        logMessage = remove_elements();
+        if (logMessage) {
+            console.log(logMessage);
         }
-    };
-
-    // When the "done" button is clicked, remove selected elements/parts of
-    // the page, and close pop-up.
-    document.querySelector('#disfg_popup button.done').onclick = function () {
-
-        let checks = document.querySelectorAll(slct_checkbox);
-        let selectors = [
-            "",
-            "#fbNotificationsJewel",
-            "#pagelet_dock>._2xwp",
-            "#bluebarRoot>div[role='banner']",
-            "div[role='search'][data-testid='facebar_root']",
-            "#pagelet_dock>.fbDockWrapperRight",
-            "#pagelet_sidebar",
-        ];
-
-        if (!checks.length) {
-            return;
-        }
-
-        if (checks[1].checked) {
-            let nj = document.querySelector(selectors[1]);
-            nj && nj.remove();
-        }
-        if (checks[2].checked) {
-            let nc = document.querySelector(selectors[2]);
-            nc && nc.remove();
-        }
-        if (checks[3].checked) {
-            let bb = document.querySelector(selectors[3]);
-            if (bb) {
-                bb.style.background = "none";
-                bb.style.borderBottom = "none";
-            }
-        }
-        if (checks[4].checked) {
-            let sb = document.querySelector(selectors[4]);
-            sb && sb.remove();
-        }
-        if (checks[5].checked) {
-            let ct = document.querySelector(selectors[5]);
-            ct && ct.remove();
-        }
-        if (checks[6].checked) {
-            let sb = document.querySelector(selectors[6]);
-            sb && sb.remove();
-        }
-
         popup.remove();
-
-    };
+    });
 
 }
+
+
 
 function disfigure_youtube() {
 
