@@ -79,7 +79,8 @@ function create_special_row(name, text) {
         row.id = "doneBtn";
     }
     row.className =
-        name === "done" ? "row done"
+        name === "presets" ? "row preset-btn"
+        : name === "done" ? "row done"
         : "row";
     row.innerText = text;
     return row;
@@ -95,6 +96,9 @@ function make_popup() {
     const popup = document.createElement("div");
     popup.id = "dsfg_popup";
     popup.className = "dsfg-popup";
+
+    const presetButton = create_special_row("presets", "Presets");
+    popup.appendChild(presetButton);
 
     const optCont = document.createElement("div");
     optCont.className = "opt-cont";
@@ -151,6 +155,7 @@ function make_popup() {
                 background-color: rgba(230, 230, 230, 0.7);
                 cursor: pointer;
             }
+            .dsfg-popup .row.preset-btn,
             .dsfg-popup .row.done {
                 font-variant: all-small-caps;
                 font-weight: bold;
@@ -162,7 +167,6 @@ function make_popup() {
                 height: 200px;
                 overflow-x: hidden;
                 overflow-y: auto;
-                padding: 20px 0;
             }
             .dsfg-popup input.cb {
                 display: none;
