@@ -14,9 +14,11 @@
 // A great use of Disfigure is (in fact, the reason behind its development
 // has been) to chat on any Facebook page (except "facebook.com/messages/...")
 // using the chat tabs (the ones that open up from bottom right) without
-// the distraction of notifications popping up every few seconds.
+// the distraction of notifications popping up every few seconds. Another
+// one is being able to watch videos on YouTube without annoying pop-ups,
+// comments, video suggestions, even the current playlist!
 
-// Kindly note that Disfigure was intended for desktop users. So, it might
+// Kindly note that Disfigure was intended for desktop users. So, it may
 // not be mobile-friendly.
 
 // Source: https://github.com/nr072/Disfigure

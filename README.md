@@ -13,10 +13,12 @@ A great use of Disfigure is
 to chat on any Facebook page (except "facebook.com/messages/...")
 using the chat tabs (the ones that open up from bottom right)
 without the distraction of notifications popping up every few seconds.
+Another one is being able to watch videos on YouTube without
+annoying pop-ups, comments, video suggestions, even the current playlist!
 
 _**Note:**
 Disfigure was intended for desktop users.
-So, it might not be mobile-friendly._
+So, it may not be mobile-friendly._
 
 ### Warning
 
@@ -27,7 +29,6 @@ So, related features may malfunction.
 
 - This was created and tested using
 Mozilla Firefox 76.0.1 (64-bit),
-Firefox Developer Edition 77.0b9 (64-bit),
 and Google Chrome 83.0.4103.61 (64-bit).
 There may be discrepancies in case of other browsers 
 or other versions of the same browser(s).
@@ -45,6 +46,91 @@ Since reloading is just a button away,
 you will find that
 removing some parts of the page to do get some peace for a while
 actually is not a bad idea.
+
+### Feature
+
+The sole feature makes it possible
+to select and remove predefined parts of a few particular websites:
+
+- Facebook options:
+
+  1. **Notification jewel:**
+Appears in the topbar,
+to the right of the icons for friend requests and chat messages.
+
+  2. **Notification card:**
+Pops up from bottom left.
+Corresponding notifications are considered seen/checked if hovered.
+
+  3. **Bluebar:**
+The blue topbar.
+
+  4. **Page background:**
+Distracting details in case of the "Chatty" preset.
+Could be page's main content!
+Use this cautiously.
+
+  5. **Chat tabs:**
+Opens from bottom right, with one tab per conversation.
+
+  6. **Sidebar:**
+Appears on the right in full-screen view
+(or if screen width is sufficient enough).
+Shows game suggestions, and online/offline friends and conversations.
+
+- Facebook presets:
+
+  - **Sneaky:**
+Combines options 1–6.
+
+  - **Chatty:**
+All options except 5.
+
+- YouTube options:
+
+  1. **Policy review:**
+Displayed if some update in the policy has not been checked out by the user yet.
+Appears above even the topbar.
+
+  2. **Top bar**
+
+  3. **Video and page titles:**
+Video name, date, and numbers of view, like, and dislike, etc.
+
+  4. **Current playlist:**
+Displayed if current video is part of a playlist.
+
+  5. **Video suggestions**
+
+  6. **Comments**
+
+  7. **Video details**
+Uploader name, subscribe button, and video description and other details.
+
+  8. **Pop-up:**
+May or may not appear,
+asking for user experience feedback,
+or advertising YouTube TV or YouTube Premium.
+
+  9. **Extra tags in `<head>`:**
+HTML tags inside `<head>` that are not visually essential for watching a video.
+
+  10. **Extra tags in `<body>`:**
+HTML tags inside `<body>` that are not visually essential for watching a video.
+
+- YouTube presets:
+
+  - **Cozy:**
+Combines options 1, 2, 4–8.
+
+  - **Sneaky:**
+Option 3.
+
+  - **Stingy:**
+Options 9 and 10.
+
+- For Google Translate,
+the pop-up about upcoming changes is directly removed.
 
 ### How to Use It
 
@@ -107,15 +193,37 @@ Other parts of the page works fine after removal.
 The page does not _break_,
 it only loses some features.
 
-- There is no "Cancel" button, only the "Done" button.
-Due to a lack of basic design sense,
-the developer went too far ahead without such a button first,
-and is now afraid to change anything visual.
-
 - The "`font-family`" and other related CSS may be different on different sites
 due to the default values on individual sites being different.
 To override all possibilities seemed like a lot of work
 and was decided against.
+
+- There is no "Cancel" button.
+The only ways of closing the pop-up are
+either clicking the "Done" button
+or pressing the "Escape" key.
+
+  Due to a lack of basic design sense,
+the developer went too far ahead without such a button first,
+and is now afraid to change anything visual.
+
+#### YouTube-specific
+
+- Disfigure should be used after the page has finished loading.
+Otherwise, unexpected parts (the main content!) may get removed.
+The CSS selectors that are used to identify targets are
+those that appear after the page is finished with all the DOM manipulation.
+
+- The "Stingy" preset must be used after the video has started loading.
+Otherwise, the `<script>` tags necessary to load it may get deleted.
+
+- Deleted parts may reappear if tab zoom changes
+(for example, the current playlist, if a playlist video is playing).
+
+- YouTube seems to insert tags into the HTML any time it wants.
+So, even after Disfigure has been used to strip the page down
+a number of parts may pop up
+(though they may not have any visual effect).
 
 ### Dependency
 
