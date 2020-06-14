@@ -166,9 +166,9 @@ function create_special_row(name) {
         : name === "Home" ? "presets_back_btn"
         : name === "Done" ? ""
         : "";
-    row.className = name === "Presets" ? "row preset-btn"
-        : name === "Home" ? "row preset-btn"
-        : name === "Done" ? "row done"
+    row.className = name === "Presets" ? "row top-btn preset-btn"
+        : name === "Home" ? "row top-btn home-btn"
+        : name === "Done" ? "row done-btn"
         : "row";
     row.innerText = name;
     return row;
@@ -299,13 +299,34 @@ function make_popup() {
                 background-color: rgba(230, 230, 230, 0.7);
                 cursor: pointer;
             }
-            .dsfg-popup .row.preset-btn,
-            .dsfg-popup .row.done {
+            .dsfg-popup .top-btn,
+            .dsfg-popup .done-btn {
                 font-variant: all-small-caps;
                 font-weight: bold;
                 height: 40px;
                 line-height: 40px;
                 padding: 0;
+            }
+            .dsfg-popup .top-btn::after,
+            .dsfg-popup .top-btn::before {
+                font-size: 1rem;
+                font-variant: none;
+                font-weight: normal;
+                margin-top: -0.05rem;
+                position: absolute;
+                transition: opacity 0.3s cubic-bezier(0.5, 0, 0.7, 0.7);
+            }
+            .dsfg-popup .preset-btn::after {
+                content: "»";
+                right: 1rem;
+            }
+            .dsfg-popup .home-btn::before {
+                content: "«";
+                left: 1rem;
+            }
+            .dsfg-popup .collapsed .top-btn::after,
+            .dsfg-popup .collapsed .top-btn::before {
+                opacity: 0;
             }
             .dsfg-popup .opt-cont {
                 height: 200px;
@@ -483,7 +504,7 @@ function disfigure_facebook() {
         preset_chatty.removeEventListener("change", toggle_chatty_options);
 
         // Remove EventListeners from all panels' "Done" buttons.
-        const done_btn_list = popup.querySelectorAll(".row.done");
+        const done_btn_list = popup.querySelectorAll(".row.done-btn");
         done_btn_list.forEach(function (done_btn) {
             done_btn.removeEventListener("click", remove_all_and_close);
         });
@@ -493,7 +514,7 @@ function disfigure_facebook() {
     };
 
     // Listener for every panel's "Done" button.
-    const done_btn_list = popup.querySelectorAll(".row.done");
+    const done_btn_list = popup.querySelectorAll(".row.done-btn");
     done_btn_list.forEach(function (done_btn) {
         done_btn.addEventListener("click", remove_all_and_close);
     });
