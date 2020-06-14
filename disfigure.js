@@ -520,6 +520,18 @@ function make_popup() {
             background-color: var(--dsfg-hover-color);
             color: #fff;
         }
+        /* Make scrollbar narrower on Google Chrome */
+        .opt-cont::-webkit-scrollbar {
+            width: 6px;
+        }
+        .opt-cont::-webkit-scrollbar-thumb {
+            background-color: var(--dsfg-hover-color);
+        }
+        /* Make scrollbar narrower on Mozilla Firefox */
+        .dsfg-popup .opt-cont {
+            scrollbar-color: var(--dsfg-hover-color) transparent;
+            scrollbar-width: thin;
+        }
     `;
     document.head.appendChild(css);
 
