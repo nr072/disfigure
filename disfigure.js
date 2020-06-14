@@ -367,11 +367,11 @@ function make_popup() {
     popup.id = "dsfg_popup";
     popup.className = "dsfg-popup";
 
-    const targets = site === "www.facebook.com" ? dsfg.fb_t_list()
+    const t_list = site === "www.facebook.com" ? dsfg.fb_t_list()
         : site === "www.youtube.com" ? dsfg.yt_t_list()
         : null;
 
-    if (!targets || !targets.length) {
+    if (!t_list || !t_list.length) {
         status = "Error: No option found!";
     }
 
@@ -381,7 +381,7 @@ function make_popup() {
         id: "home_panel",
         classes: ["home-panel"],
         h_text: "Presets",
-        options: targets,
+        options: t_list,
         f_text: "Done",
     });
 
@@ -507,10 +507,10 @@ function remove_elements() {
     let status = "";
 
     let cb_list = all_of_q(".dsfg-popup .home-panel .cb"),
-        targets = site === "www.facebook.com" ? dsfg.fb_t_list()
+        t_list = site === "www.facebook.com" ? dsfg.fb_t_list()
             : site === "www.youtube.com" ? dsfg.yt_t_list()
             : null,
-        s_list = targets.map(opt => opt.selector);
+        s_list = t_list.map(opt => opt.selector);
 
     if (!cb_list || !cb_list.length) {
         status = "Error: Checkboxes not found!";
@@ -524,45 +524,45 @@ function remove_elements() {
             continue;
         }
 
-        const is_simple_option = !targets[i].complex;
+        const is_simple_option = !t_list[i].complex;
 
         // Use common removal pattern if simple.
         if (is_simple_option) {
 
-        // Check if corresponding parts exist.
-        const t_list = all_of_q(s_list[i]);
-        if (!t_list || !t_list.length) {
-            status = status || ("Element not found: " + targets[i].text);
-        }
+            // Check if corresponding parts exist.
+            const targets = all_of_q(s_list[i]);
+            if (!targets || !targets.length) {
+                status = status || ("Element not found: " + t_list[i].text);
+            }
 
-        // Mostly remove target parts. Otherwise, modify some CSS.
-        switch (i) {
+            // Mostly remove target parts. Otherwise, modify some CSS.
+            switch (i) {
 
-            case 2:
+                case 2:
 
-                const target = t_list[0];
+                    const target = targets[0];
 
-                if (site === "www.youtube.com") {
-                    target && target.remove();
-                    document.title = "";
-                }
-
-                else if (site === "www.facebook.com") {
-                    if (target) {
-                        target.style.background = "none";
-                        target.style.borderBottom = "none";
+                    if (site === "www.youtube.com") {
+                        target && target.remove();
+                        document.title = "";
                     }
-                    const sb = target.querySelector("div[role='search']");
-                    sb.style.border = "none";
-                }
 
-                break;
+                    else if (site === "www.facebook.com") {
+                        if (target) {
+                            target.style.background = "none";
+                            target.style.borderBottom = "none";
+                        }
+                        const sb = target.querySelector("div[role='search']");
+                        sb.style.border = "none";
+                    }
 
-            default:
-                t_list.forEach(target => target.remove());
-                break;
+                    break;
 
-        }
+                default:
+                    targets.forEach(target => target.remove());
+                    break;
+
+            }
 
         }
 
@@ -571,7 +571,7 @@ function remove_elements() {
 
             const selectors = s_list[i].split("&&").map(s => s.trim());
 
-            if (targets[i].input_id === "opt_body_extras") {
+            if (t_list[i].input_id === "opt_body_extras") {
                 all_of_q(selectors[0]).forEach(tag => tag.remove());
                 all_of_q(selectors[1]).forEach(tag => tag.remove());
             }
