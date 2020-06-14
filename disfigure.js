@@ -117,6 +117,10 @@ const dsfg = function () {
                 text: "Video details",
                 input_id: "opt_details",
                 selector: "#primary #meta.ytd-watch-flexy",
+            }, {
+                text: "Pop-up",
+                input_id: "opt_popup",
+                selector: "paper-dialog.ytd-popup-container",
             },
         ],
 
@@ -525,6 +529,7 @@ function remove_elements() {
             case 4:
             case 5:
             case 6:
+            case 7:
                 target && target.remove();
                 break;
 
@@ -595,7 +600,7 @@ function disfigure() {
     } else if (site === "www.youtube.com") {
 
         toggle_cozy_opts = function (e) {
-            toggle_options(e, [0, 1, 3, 4, 5, 6]);
+            toggle_options(e, [0, 1, 3, 4, 5, 6, 7]);
         };
         toggle_sneaky_opts = function (e) {
             toggle_options(e, [2]);
