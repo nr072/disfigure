@@ -283,28 +283,6 @@ function make_popup() {
 
 
 
-// Reveal the target panel and hide the others.
-function show_panel(name) {
-
-    const home_panel = document.getElementById("home_panel");
-    const presets_panel = document.getElementById("presets_panel");
-    let next, past;
-
-    if (name === "presets") {
-        next = presets_panel;
-        past = home_panel;
-    } else if (name === "home") {
-        next = home_panel;
-        past = presets_panel;
-    }
-
-    next.classList.remove("collapsed");
-    past.classList.add("collapsed");
-
-}
-
-
-
 // Remove parts of the webpage based on selected options (checkboxes).
 function remove_elements() {
 
@@ -380,46 +358,82 @@ function disfigure_facebook() {
         return;
     }
 
-    // Hide the Home panel and open the Presets panel when the "Presets"
-    // button is clicked.
+    // Reveal the target panel and hide the others.
+    const show_panel = function (e) {
+
+        const home_panel = document.getElementById("home_panel");
+        const presets_panel = document.getElementById("presets_panel");
+        let next, past, name = e.target.innerText;
+
+        if (name === "Presets") {
+            next = presets_panel;
+            past = home_panel;
+        } else if (name === "Home") {
+            next = home_panel;
+            past = presets_panel;
+        }
+
+        next.classList.remove("collapsed");
+        past.classList.add("collapsed");
+
+    };
+
     const pres_btn = document.getElementById("presets_btn");
-    pres_btn.addEventListener("click", function () {
-        show_panel("presets");
-    });
-
-    // Hide the Presets panel and open the Home panel when the "Home"
-    // button is clicked.
     const pres_back_btn = document.getElementById("presets_back_btn");
-    pres_back_btn.addEventListener("click", function () {
-        show_panel("home");
-    });
+    pres_btn.addEventListener("click", show_panel);
+    pres_back_btn.addEventListener("click", show_panel);
 
-    const preset_sneaky = document.getElementById("preset_sneaky");
-    preset_sneaky.addEventListener("change", function (e) {
+    // Select corresponding Home panel options (checkboxes) when the
+    // "Sneaky" preset is selected.
+    const toggle_sneaky_options = function (e) {
         const id_list = dsfg.fb_t_list().map(p => p.input_id);
         id_list.forEach(id => {
             const input = document.getElementById(id);
             input.checked = e.target.checked;
         });
-    });
+    };
 
-    const preset_chatty = document.getElementById("preset_chatty");
-    preset_chatty.addEventListener("change", function (e) {
+    // Select corresponding Home panel options (checkboxes) when the
+    // "Chatty" preset is selected.
+    const toggle_chatty_options = function (e) {
         const id_list = dsfg.fb_t_list([0, 1, 2, 3, 5]).map(p => p.input_id);
         id_list.forEach(id => {
             const input = document.getElementById(id);
             input.checked = e.target.checked;
         });
-    });
+    };
 
-    // Remove if options are selected, and close pop-up.
+    const preset_sneaky = document.getElementById("preset_sneaky");
+    const preset_chatty = document.getElementById("preset_chatty");
+    preset_sneaky.addEventListener("change", toggle_sneaky_options);
+    preset_chatty.addEventListener("change", toggle_chatty_options);
+
+    // When the "Done" button is clicked, remove selected options, remove
+    // preset EventListeners, and then remove the pop-up.
+    const remove_all_and_close = function () {
+
+        status = remove_elements();
+        status && console.log(status);
+
+        pres_btn.removeEventListener("click", show_panel);
+        pres_back_btn.removeEventListener("click", show_panel);
+        preset_sneaky.removeEventListener("change", toggle_sneaky_options);
+        preset_chatty.removeEventListener("change", toggle_chatty_options);
+
+        // Remove EventListeners from all panels' "Done" buttons.
+        const doneBtns = popup.querySelectorAll(".row.done");
+        doneBtns.forEach(function (doneBtn) {
+            doneBtn.removeEventListener("click", remove_all_and_close);
+        });
+
+        popup.remove();
+
+    };
+
+    // Listener for every panel's "Done" button.
     const doneBtns = popup.querySelectorAll(".row.done");
     doneBtns.forEach(function (doneBtn) {
-        doneBtn.addEventListener("click", function () {
-            status = remove_elements();
-            status && console.log(status);
-            popup.remove();
-        });
+        doneBtn.addEventListener("click", remove_all_and_close);
     });
 
 }
