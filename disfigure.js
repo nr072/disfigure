@@ -40,8 +40,6 @@
 
 "use strict";
 
-const site = location.host;
-
 const dsfg = function () {
 
     const facebook = {
@@ -162,6 +160,18 @@ const dsfg = function () {
 
     return {
 
+        // Get site name for compatible sites/URLs.
+        get_site: function () {
+            const host = location.host;
+            return host === "www.facebook.com"
+                ? "facebook"
+                : host === "www.youtube.com"
+                    ? (location.pathname === "/watch" ? "youtube" : null)
+                    : host === "translate.google.com"
+                        ? "g_transl"
+                        : null;
+        },
+
         // Returns targets of specified index(es).
         fb_t_list: function (indexes) {
             if (!indexes || !indexes.length) {
@@ -235,9 +245,9 @@ const toggle_options = function (e, preset_indexes) {
 
     !e.target.checked && uncheck_presets();
 
-    const id_list = site === "www.facebook.com"
+    const id_list = dsfg.get_site() === "facebook"
         ? dsfg.fb_t_list(preset_indexes).map(p => p.input_id)
-        : site === "www.youtube.com"
+        : dsfg.get_site() === "youtube"
             ? dsfg.yt_t_list(preset_indexes).map(p => p.input_id)
             : null;
 
@@ -251,9 +261,9 @@ const toggle_options = function (e, preset_indexes) {
 
 
 
-site === "www.facebook.com" || site === "www.youtube.com"
+dsfg.get_site() === "facebook" || dsfg.get_site() === "youtube"
     ? disfigure()
-    : site === "translate.google.com"
+    : dsfg.get_site() === "g_transl"
         ? remove_single("g_transl")
         : console.log("[Disfigure] Warning: Disfigure does not support this address!");
 
@@ -370,8 +380,8 @@ function make_popup() {
     popup.id = "dsfg_popup";
     popup.className = "dsfg-popup";
 
-    const t_list = site === "www.facebook.com" ? dsfg.fb_t_list()
-        : site === "www.youtube.com" ? dsfg.yt_t_list()
+    const t_list = dsfg.get_site() === "facebook" ? dsfg.fb_t_list()
+        : dsfg.get_site() === "youtube" ? dsfg.yt_t_list()
         : null;
 
     if (!t_list || !t_list.length) {
@@ -388,8 +398,8 @@ function make_popup() {
         f_text: "Done",
     });
 
-    const presets = site === "www.facebook.com" ? dsfg.fb_p_list()
-        : site === "www.youtube.com" ? dsfg.yt_p_list()
+    const presets = dsfg.get_site() === "facebook" ? dsfg.fb_p_list()
+        : dsfg.get_site() === "youtube" ? dsfg.yt_p_list()
         : null;
 
     if (!presets || !presets.length) {
@@ -510,8 +520,8 @@ function remove_elements() {
     let status = "";
 
     let cb_list = all_of_q(".dsfg-popup .home-panel .cb"),
-        t_list = site === "www.facebook.com" ? dsfg.fb_t_list()
-            : site === "www.youtube.com" ? dsfg.yt_t_list()
+        t_list = dsfg.get_site() === "facebook" ? dsfg.fb_t_list()
+            : dsfg.get_site() === "youtube" ? dsfg.yt_t_list()
             : null,
         s_list = t_list.map(opt => opt.selector);
 
@@ -623,7 +633,7 @@ function disfigure() {
     // a preset selection.
     let toggle_sneaky_opts, toggle_chatty_opts, toggle_cozy_opts,
         toggle_stingy_opts;
-    if (site === "www.facebook.com") {
+    if (dsfg.get_site() === "facebook") {
 
         toggle_sneaky_opts = function (e) {
             toggle_options(e);
@@ -632,7 +642,7 @@ function disfigure() {
             toggle_options(e, [0, 1, 2, 3, 5]);
         };
 
-    } else if (site === "www.youtube.com") {
+    } else if (dsfg.get_site() === "youtube") {
 
         toggle_cozy_opts = function (e) {
             toggle_options(e, [0, 1, 3, 4, 5, 6, 7]);
