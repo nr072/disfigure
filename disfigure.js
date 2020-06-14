@@ -122,13 +122,14 @@ const dsfg = function () {
                 input_id: "opt_popup",
                 selector: "paper-dialog.ytd-popup-container",
             }, {
-                text: "Inline frames (<iframe>)",
-                input_id: "opt_iframes",
-                selector: "iframe",
+                text: "Extra tags in <head>",
+                input_id: "opt_head_extras",
+                selector: "head > :not(#player-css):not(div):not(#dsfg_style):not([name='searchbox'])",
             }, {
-                text: "Minimal HTML",
-                input_id: "opt_minimal",
-                selector: "body > :not(ytd-app)",
+                text: "Extra tags in <body>",
+                input_id: "opt_body_extras",
+                complex: true,
+                selector: "body > :not(ytd-app) && body > ytd-app > :not(#content)",
             },
         ],
 
@@ -523,6 +524,12 @@ function remove_elements() {
             continue;
         }
 
+        const is_simple_option = !targets[i].complex;
+
+        // Use common removal pattern if simple.
+        if (is_simple_option) {
+
+        // Check if corresponding parts exist.
         const t_list = all_of_q(s_list[i]);
         if (!t_list || !t_list.length) {
             status = status || ("Element not found: " + targets[i].text);
@@ -554,6 +561,20 @@ function remove_elements() {
             default:
                 t_list.forEach(target => target.remove());
                 break;
+
+        }
+
+        }
+
+        // If not simple option, apply specific conditions.
+        else {
+
+            const selectors = s_list[i].split("&&").map(s => s.trim());
+
+            if (targets[i].input_id === "opt_body_extras") {
+                all_of_q(selectors[0]).forEach(tag => tag.remove());
+                all_of_q(selectors[1]).forEach(tag => tag.remove());
+            }
 
         }
 
