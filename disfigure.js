@@ -125,6 +125,10 @@ const dsfg = function () {
                 text: "Inline frames (<iframe>)",
                 input_id: "opt_iframes",
                 selector: "iframe",
+            }, {
+                text: "Minimal HTML",
+                input_id: "opt_minimal",
+                selector: "body > :not(ytd-app)",
             },
         ],
 
