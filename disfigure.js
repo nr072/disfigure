@@ -2,8 +2,10 @@
 
 const site = location.host;
 
-const dsfg = {
-    facebook: {
+const dsfg = function () {
+
+    const facebook = {
+
         targets: [
             {
                 text: "Notification jewel",
@@ -31,14 +33,37 @@ const dsfg = {
                 selector: "#pagelet_sidebar",
             },
         ],
+
         presets: [
             {
                 text: "All",
                 input_id: "preset_all",
             },
         ],
-    },
-};
+
+    };
+
+    return {
+
+        fb_t_list: function (indexes) {
+            if (indexes && indexes.length > 0) {
+                return facebook.targets.filter((t, i) => { indexes.indexOf(i) > -1 });
+            } else {
+                return facebook.targets;
+            }
+        },
+
+        fb_p_list: function (indexes) {
+            if (indexes && indexes.length > 0) {
+                return facebook.presets.filter((t, i) => { indexes.indexOf(i) > -1 });
+            } else {
+                return facebook.presets;
+            }
+        },
+
+    };
+
+}();
 
 
 
@@ -142,7 +167,7 @@ function make_popup() {
     popup.className = "dsfg-popup";
 
     const targets = site === "www.facebook.com"
-            ? dsfg.facebook.targets
+            ? dsfg.fb_t_list()
             : site === "www.youtube.com"
                 ? dsfg.youtube.options
                 : null;
@@ -160,7 +185,7 @@ function make_popup() {
     });
 
     const presets = site === "www.facebook.com"
-            ? dsfg.facebook.presets
+            ? dsfg.fb_p_list()
             : null;
 
     if (presets.length < 1) {
@@ -280,7 +305,7 @@ function remove_elements() {
     let logMessage = "";
 
     let cbList = document.querySelectorAll(".dsfg-popup .home-panel input.cb"),
-        sList = dsfg.facebook.targets.map(function (opt) {
+        sList = dsfg.fb_t_list().map(function (opt) {
             return opt.selector;
         });
 
@@ -299,7 +324,7 @@ function remove_elements() {
 
         const el = document.querySelector(sList[i]);
         if (!el) {
-            const msg = "Element not found: " + dsfg.facebook.targets[i].text;
+            const msg = "Element not found: " + dsfg.fb_t_list()[i].text;
             logMessage = logMessage || msg;
         }
 
