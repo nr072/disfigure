@@ -671,6 +671,15 @@ function disfigure() {
         opt.addEventListener("change", uncheck_presets);
     });
 
+    // Close pop-up if the "Escape" key is pressed.
+    const close_on_escape = function (e) {
+        if (e.key === "Escape") {
+            remove_all_and_close();
+        }
+    };
+
+    document.addEventListener("keydown", close_on_escape);
+
     // When the "Done" button is clicked, remove selected options, remove
     // preset EventListeners, and then remove the pop-up.
     const remove_all_and_close = function () {
@@ -691,6 +700,8 @@ function disfigure() {
         done_btn_list.forEach(function (done_btn) {
             done_btn.removeEventListener("click", remove_all_and_close);
         });
+
+        document.removeEventListener("keydown", close_on_escape);
 
         home_options.forEach(opt => {
             opt.removeEventListener("change", uncheck_presets);
