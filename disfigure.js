@@ -384,6 +384,7 @@ function make_popup() {
         .dsfg-popup {
             background-color: #fff;
             box-shadow: 0 0 1px 1px #ccc;
+            font-size: 12px;
             height: 280px;
             left: 50%;
             position: fixed;
@@ -406,12 +407,6 @@ function make_popup() {
             overflow: hidden;
             text-align: center;
         }
-        .dsfg-popup .opt {
-            display: block;
-            height: 1rem;
-            margin-top: 2px;
-            padding: 0.5em 1em;
-        }
         .dsfg-popup .row:hover,
         .dsfg-popup .opt:hover {
             background-color: rgba(230, 230, 230, 0.7);
@@ -421,26 +416,23 @@ function make_popup() {
         .dsfg-popup .done-btn {
             font-variant: all-small-caps;
             font-weight: bold;
-            height: 40px;
             line-height: 40px;
-            padding: 0;
         }
         .dsfg-popup .top-btn::after,
         .dsfg-popup .top-btn::before {
-            font-size: 1rem;
             font-variant: none;
             font-weight: normal;
-            margin-top: -0.05rem;
+            margin-top: -1px;
             position: absolute;
             transition: opacity 0.3s cubic-bezier(0.5, 0, 0.7, 0.7);
         }
         .dsfg-popup .preset-btn::after {
             content: "»";
-            right: 1rem;
+            right: 12px;
         }
         .dsfg-popup .home-btn::before {
             content: "«";
-            left: 1rem;
+            left: 12px;
         }
         .dsfg-popup .collapsed .top-btn::after,
         .dsfg-popup .collapsed .top-btn::before {
@@ -455,9 +447,11 @@ function make_popup() {
             display: none;
         }
         .dsfg-popup .opt {
+            display: block;
             font-weight: normal;
-            line-height: 1.1rem;
-            padding: 0.5em 1em;
+            height: 12px;
+            margin-top: 2px;
+            padding: 6px 12px;
             text-align: center;
         }
         .dsfg-popup input.cb:checked + .opt {
