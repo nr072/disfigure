@@ -1,3 +1,43 @@
+// Disfigure: Temporarily remove selected parts of a webpage
+// 2020-19-07
+// Copyright (c) <2019> Nafiur Rahman
+
+
+
+// Disfigure (DIStraction-Free Interface by Great-but-Ugly Removal of
+// Elements), by temporarily removing undesirable parts of a website, makes
+// it possible to enjoy a stripped-down version of the site. The removal is
+// temporary in the sense that a tab reload or a refresh will bring back the
+// removed parts. But the parts are not just hidden. So, the reload/refresh
+// is actually necessary.
+
+// A great use of Disfigure is (in fact, the reason behind its development
+// has been) to chat on any Facebook page (except "facebook.com/messages/...")
+// using the chat tabs (the ones that open up from bottom right) without
+// the distraction of notifications popping up every few seconds.
+
+// Kindly note that Disfigure was intended for desktop users. So, it might
+// not be mobile-friendly.
+
+// Source: https://github.com/nr072/Disfigure
+
+// How to use it
+// =============
+
+// If you want to use the source code directly, copy and paste the code in
+// your browser console. You might want to go through the code before doing
+// it, since pasting unknown stuff in a browser console is highly dangerous.
+// Although, this way would be impractical if you wanted to use it again,
+// since you would need to paste the code in the console every time.
+
+// Or, if you are using the bookmarklet file ("disfigure.txt"), just add it
+// to your browser as a bookmarklet and click to activate.
+
+// The pop-up box will appear, showing several options, including the names
+// of a few parts of the webpage and possibly a couple of preset options.
+// After you have selected, click the "Done" button. The selected parts
+// will be gone, and the pop-up will disappear.
+
 "use strict";
 
 const site = location.host;
