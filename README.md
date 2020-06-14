@@ -112,22 +112,25 @@ May or may not appear,
 asking for user experience feedback,
 or advertising YouTube TV or YouTube Premium.
 
-  9. **Extra tags in `<head>`:**
+  9. **Video overlay ad:**
+Advertisements that appear on the video.
+
+  10. **Extra tags in `<head>`:**
 HTML tags inside `<head>` that are not visually essential for watching a video.
 
-  10. **Extra tags in `<body>`:**
+  11. **Extra tags in `<body>`:**
 HTML tags inside `<body>` that are not visually essential for watching a video.
 
 - YouTube presets:
 
   - **Cozy:**
-Combines options 1, 2, 4–8.
+Combines options 1, 2, 4–9.
 
   - **Sneaky:**
 Option 3.
 
   - **Stingy:**
-Options 9 and 10.
+Options 10 and 11.
 
 - For Google Translate,
 the pop-up about upcoming changes is directly removed.

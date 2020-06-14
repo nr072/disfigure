@@ -90,7 +90,7 @@ const dsfg = function () {
 
         targets: [
             {
-                text: "Policy Review",
+                text: "Policy review",
                 input_id: "opt_ticker",
                 selector: "#ticker.ytd-masthead",
             }, {
@@ -121,6 +121,10 @@ const dsfg = function () {
                 text: "Pop-up",
                 input_id: "opt_popup",
                 selector: "paper-dialog.ytd-popup-container",
+            }, {
+                text: "Video overlay ad",
+                input_id: "opt_video_ad",
+                selector: ".video-ads.ytp-ad-module",
             }, {
                 text: "Extra tags in <head>",
                 input_id: "opt_head_extras",
@@ -672,13 +676,13 @@ function disfigure() {
     } else if (dsfg.get_site() === "youtube") {
 
         toggle_cozy_opts = function (e) {
-            toggle_options(e, [0, 1, 3, 4, 5, 6, 7]);
+            toggle_options(e, [0, 1, 3, 4, 5, 6, 7, 8]);
         };
         toggle_sneaky_opts = function (e) {
             toggle_options(e, [2]);
         };
         toggle_stingy_opts = function (e) {
-            toggle_options(e, [8, 9]);
+            toggle_options(e, [9, 10]);
         };
 
     }
