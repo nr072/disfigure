@@ -430,31 +430,30 @@ function remove_elements() {
         }
 
         // Mostly remove target parts. Otherwise, modify some CSS.
-        if (site === "www.facebook.com") {
-            switch (i) {
-                case 0:
-                case 1:
-                case 3:
-                case 4:
-                case 5:
+        switch (i) {
+
+            case 0:
+            case 1:
+            case 3:
+            case 4:
+            case 5:
+                target && target.remove();
+                break;
+
+            case 2:
+                if (site === "www.youtube.com") {
                     target && target.remove();
-                    break;
-                case 2:
+                }
+                else if (site === "www.facebook.com") {
                     if (target) {
                         target.style.background = "none";
                         target.style.borderBottom = "none";
                     }
                     const sb = target.querySelector("div[role='search']");
                     sb.style.border = "none";
-                    break;
-            }
-        } else if (site === "www.youtube.com") {
-            switch (i) {
-                case 0:
-                case 1:
-                    target && target.remove();
-                    break;
-            }
+                }
+                break;
+
         }
 
     }
