@@ -48,22 +48,16 @@ const dsfg = function () {
 
     return {
 
-        // Returns targets of specified indexes.
+        // Returns targets of specified index(es).
         fb_t_list: function (indexes) {
-            if (indexes && indexes.length > 0) {
-                return facebook.targets.filter((t, i) => indexes.indexOf(i) > -1 );
-            } else {
+            if (!indexes || !indexes.length) {
                 return facebook.targets;
             }
+            return facebook.targets.filter((t, i) => indexes.indexOf(i) > -1 );
         },
 
-        // Returns presets of specified indexes.
-        fb_p_list: function (indexes) {
-            if (indexes && indexes.length > 0) {
-                return facebook.presets.filter((t, i) => { indexes.indexOf(i) > -1 });
-            } else {
-                return facebook.presets;
-            }
+        fb_p_list: function () {
+            return facebook.presets;
         },
 
     };
