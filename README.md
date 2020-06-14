@@ -10,35 +10,34 @@ So, the reload/refresh is actually necessary.
 
 A great use of Disfigure is
 (in fact, the reason behind its development has been)
-to chat on any Facebook page (except "`facebook.com/messages`")
+to chat on any Facebook page (except "facebook.com/messages/...")
 using the chat tabs (the ones that open up from bottom right)
 without the distraction of notifications popping up every few seconds.
 
 _**Note:**
 Disfigure was intended for desktop users.
-So, it might not be very (or at all) mobile-friendly._
+So, it might not be mobile-friendly._
 
 ### Warning
 
-- Removal of parts/elements is irreversible without a tab reload/refresh.
+- Removal of parts is irreversible without a tab reload/refresh.
 
 - Disfigure removes without being nice about it.
 So, related features may malfunction.
 
-_**Note:**
-This was created and tested using
-Firefox Developer Edition 77.0b2 (64-bit)
-on Ubuntu 16.04 LTS.
+- This was created and tested using
+Mozilla Firefox 76.0.1 (64-bit),
+Firefox Developer Edition 77.0b9 (64-bit),
+and Google Chrome 83.0.4103.61 (64-bit).
 There may be discrepancies in case of other browsers 
-or other versions of the same browser(s)
-or other operating systems._
+or other versions of the same browser(s).
 
 ### Why Use It
 
 Using a website does not mean you have to make use of every feature all the time.
 Chatting on Facebook (using the webpage, not via Messenger)
-can be interrupted by continuous pop-up notifications,
-or quietly watching a YouTube video can be ruined
+can be interrupted by continuous pop-up notifications.
+Or quietly watching a YouTube video can be ruined
 by a persistent reminder about some new policy (not that those should be ignored)
 or a feedback form demanding to know how your day is going.
 
@@ -52,6 +51,8 @@ actually is not a bad idea.
 To use the code directly in the browser console,
 copy the content of "`disfigure.js`" and paste it in the console.
 Disfigure will activate.
+(Although, this way would be impractical if you wanted to use it more than once,
+since you would need to paste the code in the console every time.)
 
 To use the bookmarklet file ("`disfigure.txt`"),
 just add its content as a bookmarklet to your browser.
@@ -60,7 +61,7 @@ If you want to make a bookmarklet yourself,
 see instructions
 [somewhere below](#how-to-make-a-bookmarklet).
 
-#### Creating a bookmarklet in browser
+#### Adding a bookmarklet to browser
 
 1. Create a new bookmark in your browser.
 
@@ -75,27 +76,28 @@ You are expected to use "Disfigure" as the bookmarklet name.
 1. Activate Disfigure.
 The pop-up will appear.
 
-2. Select your options.
+2. Select your options and/or presets.
 
 3. Click on the "Done" button.
 
-Selected parts of the page will have disappeared.
+Selected parts of the page will disappear.
 
 ### How It Works
 
 Disfigure removes the HTML code of the selected part from the page's HTML.
 Dead simple.
 
-(Except for the "blue bar" on Facebook,
+(Except for Facebook's "bluebar"
 where it only changes the color to transparent.)
 
 ### Upside
 
-- Disfigure removes distracting and undesirable parts of a webpage.
+Disfigure removes distracting and undesirable parts of a webpage
+so that you may chat or watch a video in peace.
 
 ### Downside
 
-- Disfigure removes the selected parts from the HTML structure of the webpage.
+- The selected parts are removed from the HTML structure of the webpage.
 So, the only way to get a deleted part back
 is to reload the tab.
 
@@ -104,6 +106,16 @@ the browser console may throw a lot of errors.
 Other parts of the page works fine after removal.
 The page does not _break_,
 it only loses some features.
+
+- There is no "Cancel" button, only the "Done" button.
+Due to a lack of basic design sense,
+the developer went too far ahead without such a button first,
+and is now afraid to change anything visual.
+
+- The "`font-family`" and other related CSS may be different on different sites
+due to the default values on individual sites being different.
+To override all possibilities seemed like a lot of work
+and was decided against.
 
 ### Dependency
 
@@ -124,9 +136,7 @@ to minify the code while creating the provided bookmarklet.
 
 ### Future Plan
 
-- Site-specific subpanels
 - Addition:
-  - Facebook: background text
   - Google spreadsheet: zoom messages
   - Google Translate: upcoming changes
 - Site-specific colors (stalled due to lack of design sense)
@@ -137,7 +147,7 @@ to minify the code while creating the provided bookmarklet.
 #### Is there a debug mode?
 
 No.
-But a message is printed in the browser console in a few scenarios.
+But helpful messages are printed in the browser console in a few scenarios.
 
 #### What's with the "Great-but-Ugly"?
 
@@ -152,7 +162,7 @@ This was a reason an alternative interpretation
 "Distraction-Free Interface by _Generally Unadvised_ Removal of Elements"
 was considered.
 
-#### How to make a bookmarklet?
+#### How do I make a bookmarklet?
 
 Disfigure is already provided in bookmarklet form
 (the "`disfigure.txt`" file).
