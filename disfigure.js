@@ -36,8 +36,8 @@ const dsfg = function () {
 
         presets: [
             {
-                text: "All",
-                input_id: "preset_all",
+                text: "Sneaky",
+                input_id: "preset_sneaky",
             },
         ],
 
@@ -48,7 +48,7 @@ const dsfg = function () {
         // Returns targets of specified indexes.
         fb_t_list: function (indexes) {
             if (indexes && indexes.length > 0) {
-                return facebook.targets.filter((t, i) => { indexes.indexOf(i) > -1 });
+                return facebook.targets.filter((t, i) => indexes.indexOf(i) > -1 );
             } else {
                 return facebook.targets;
             }
@@ -397,13 +397,13 @@ function disfigure_facebook() {
         show_panel("home");
     });
 
-    // Select all options if the "All" preset is selected.
-    const preset_all = document.getElementById("preset_all");
-    preset_all.addEventListener("change", function (e) {
-        let cbList = popup.querySelectorAll(".home-panel input.cb");
-        for(let i = 0; i < cbList.length; ++i) {
-            cbList[i].checked = e.target.checked;
-        }
+    const preset_sneaky = document.getElementById("preset_sneaky");
+    preset_sneaky.addEventListener("change", function (e) {
+        const id_list = dsfg.fb_t_list().map(p => p.input_id);
+        id_list.forEach(id => {
+            const input = document.getElementById(id);
+            input.checked = e.target.checked;
+        });
     });
 
     // Remove if options are selected, and close pop-up.
