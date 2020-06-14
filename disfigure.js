@@ -121,6 +121,10 @@ const dsfg = function () {
                 text: "Pop-up",
                 input_id: "opt_popup",
                 selector: "paper-dialog.ytd-popup-container",
+            }, {
+                text: "Inline frames (<iframe>)",
+                input_id: "opt_iframes",
+                selector: "iframe",
             },
         ],
 
@@ -515,8 +519,8 @@ function remove_elements() {
             continue;
         }
 
-        const target = document.querySelector(s_list[i]);
-        if (!target) {
+        const t_list = all_of_q(s_list[i]);
+        if (!t_list || !t_list.length) {
             status = status || ("Element not found: " + targets[i].text);
         }
 
@@ -524,10 +528,14 @@ function remove_elements() {
         switch (i) {
 
             case 2:
+
+                const target = t_list[0];
+
                 if (site === "www.youtube.com") {
                     target && target.remove();
                     document.title = "";
                 }
+
                 else if (site === "www.facebook.com") {
                     if (target) {
                         target.style.background = "none";
@@ -536,10 +544,11 @@ function remove_elements() {
                     const sb = target.querySelector("div[role='search']");
                     sb.style.border = "none";
                 }
+
                 break;
 
             default:
-                target && target.remove();
+                t_list.forEach(target => target.remove());
                 break;
 
         }
