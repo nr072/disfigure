@@ -523,16 +523,6 @@ function remove_elements() {
         // Mostly remove target parts. Otherwise, modify some CSS.
         switch (i) {
 
-            case 0:
-            case 1:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-                target && target.remove();
-                break;
-
             case 2:
                 if (site === "www.youtube.com") {
                     target && target.remove();
@@ -546,6 +536,10 @@ function remove_elements() {
                     const sb = target.querySelector("div[role='search']");
                     sb.style.border = "none";
                 }
+                break;
+
+            default:
+                target && target.remove();
                 break;
 
         }
