@@ -128,8 +128,8 @@ const dsfg = function () {
             }, {
                 text: "Extra tags in <body>",
                 input_id: "opt_body_extras",
-                complex: true,
                 selector: "body > :not(ytd-app) && body > ytd-app > :not(#content)",
+                compound: true,
             },
         ],
 
@@ -527,9 +527,9 @@ function remove_elements() {
             continue;
         }
 
-        const is_simple_option = !t_list[i].complex;
+        const is_simple_option = !t_list[i].compound;
 
-        // Use common removal pattern if simple.
+        // Removal mechanics for simple options.
         if (is_simple_option) {
 
             // Check if corresponding parts exist.
@@ -539,38 +539,39 @@ function remove_elements() {
                 status = status || ("[Disfigure] Target not found: " + label);
             }
 
-            // Mostly remove target parts. Otherwise, modify some CSS.
-            switch (i) {
+            const input_id = t_list[i].input_id;
 
-                case 2:
+            // Specific case: For YouTube, remove video title section and
+            // HTML page title.
+            if (input_id === "opt_title") {
+                const target = targets[0];
+                target && target.remove();
+                document.title = "";
+            }
 
-                    const target = targets[0];
+            // Specific case: For Facebook, make the "bluebar" and its
+            // search bar less visible.
+            else if (input_id === "opt_bar") {
 
-                    if (site === "www.youtube.com") {
-                        target && target.remove();
-                        document.title = "";
-                    }
+                const target = targets[0];
+                if (target) {
+                    target.style.background = "none";
+                    target.style.borderBottom = "none";
+                }
 
-                    else if (site === "www.facebook.com") {
-                        if (target) {
-                            target.style.background = "none";
-                            target.style.borderBottom = "none";
-                        }
-                        const sb = target.querySelector("div[role='search']");
-                        sb.style.border = "none";
-                    }
+                const sb = target.querySelector("div[role='search']");
+                sb.style.border = "none";
 
-                    break;
+            }
 
-                default:
-                    targets.forEach(target => target.remove());
-                    break;
-
+            // Common case: Just remove the target.
+            else {
+                targets.forEach(target => target.remove());
             }
 
         }
 
-        // If not simple option, apply specific conditions.
+        // Removal mechanics for compound options.
         else {
 
             const selectors = s_list[i].split("&&").map(s => s.trim());
