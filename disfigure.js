@@ -535,7 +535,8 @@ function remove_elements() {
             // Check if corresponding parts exist.
             const targets = all_of_q(s_list[i]);
             if (!targets || !targets.length) {
-                status = status || ("[Disfigure] Target not found: " + t_list[i].text);
+                const label =  t_list[i].text;
+                status = status || ("[Disfigure] Target not found: " + label);
             }
 
             // Mostly remove target parts. Otherwise, modify some CSS.
@@ -607,7 +608,8 @@ function disfigure() {
 
     const popup = id_of("dsfg_popup");
     if (!popup) {
-        console.log(status || "[Disfigure] Error: Something unexpected happened!");
+        const new_msg = "[Disfigure] Error: Something unexpected happened!";
+        console.log(status || new_msg);
         return;
     }
 
