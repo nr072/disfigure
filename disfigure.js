@@ -114,6 +114,17 @@ if (site === "www.facebook.com") {
 
 
 
+// Alias functions of shorter names.
+function id_of(id) {
+    return document.getElementById(id);
+}
+
+function all_of_q(selector) {
+    return document.querySelectorAll(selector);
+}
+
+
+
 // Create the clickable options that correspond to different parts of the
 // webpage (excluding the top ("Presets", "Home") and the bottom ("Done")
 // buttons).
@@ -325,7 +336,7 @@ function make_popup() {
 
 // Uncheck all options and all presets except the passed parameter.
 function uncheck_all_but(clicked) {
-    let cb_list = document.querySelectorAll(".dsfg-popup input.cb");
+    let cb_list = all_of_q(".dsfg-popup input.cb");
     cb_list.forEach(cb => { cb.checked = false; });
     clicked.checked = true;
 }
@@ -337,7 +348,7 @@ function remove_elements() {
 
     let status = "";
 
-    let cb_list = document.querySelectorAll(".dsfg-popup .home-panel .cb"),
+    let cb_list = all_of_q(".dsfg-popup .home-panel .cb"),
         s_list = dsfg.fb_t_list().map(function (opt) {
             return opt.selector;
         });
@@ -391,7 +402,7 @@ function disfigure_facebook() {
 
     let status = "";
 
-    if (document.getElementById("dsfg_popup")) {
+    if (id_of("dsfg_popup")) {
         status = 'Pop-up exists or same element "id" in use!';
         console.log(status);
         return;
@@ -401,7 +412,7 @@ function disfigure_facebook() {
     status = make_popup();
     status && console.log(status);
 
-    const popup = document.getElementById("dsfg_popup");
+    const popup = id_of("dsfg_popup");
     if (!popup) {
         console.log(status || "Error: Something unexpected happened!");
         return;
@@ -410,8 +421,8 @@ function disfigure_facebook() {
     // Reveal the target panel and hide the others.
     const show_panel = function (e) {
 
-        const home_panel = document.getElementById("home_panel");
-        const presets_panel = document.getElementById("presets_panel");
+        const home_panel = id_of("home_panel");
+        const presets_panel = id_of("presets_panel");
         let next, past, name = e.target.innerText;
 
         if (name === "Presets") {
@@ -427,8 +438,8 @@ function disfigure_facebook() {
 
     };
 
-    const pres_btn = document.getElementById("presets_btn");
-    const pres_back_btn = document.getElementById("presets_back_btn");
+    const pres_btn = id_of("presets_btn");
+    const pres_back_btn = id_of("presets_back_btn");
     pres_btn.addEventListener("click", show_panel);
     pres_back_btn.addEventListener("click", show_panel);
 
@@ -438,7 +449,7 @@ function disfigure_facebook() {
         uncheck_all_but(e.target);
         const id_list = dsfg.fb_t_list().map(p => p.input_id);
         id_list.forEach(id => {
-            const input = document.getElementById(id);
+            const input = id_of(id);
             input.checked = e.target.checked;
         });
     };
@@ -449,13 +460,13 @@ function disfigure_facebook() {
         uncheck_all_but(e.target);
         const id_list = dsfg.fb_t_list([0, 1, 2, 3, 5]).map(p => p.input_id);
         id_list.forEach(id => {
-            const input = document.getElementById(id);
+            const input = id_of(id);
             input.checked = e.target.checked;
         });
     };
 
-    const preset_sneaky = document.getElementById("preset_sneaky");
-    const preset_chatty = document.getElementById("preset_chatty");
+    const preset_sneaky = id_of("preset_sneaky");
+    const preset_chatty = id_of("preset_chatty");
     preset_sneaky.addEventListener("change", toggle_sneaky_options);
     preset_chatty.addEventListener("change", toggle_chatty_options);
 
@@ -494,6 +505,6 @@ function disfigure_facebook() {
 function disfigure_youtube() {
 
     // Remove pop-up container
-    document.querySelectorAll('ytd-popup-container').style.display = 'none';
+    all_of_q('ytd-popup-container').style.display = 'none';
 
 }
