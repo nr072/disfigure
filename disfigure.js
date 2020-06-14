@@ -86,6 +86,29 @@ const dsfg = function () {
 
     };
 
+    const youtube = {
+
+        targets: [
+            {
+                text: "Policy Review",
+                input_id: "opt_ticker",
+                selector: "#ticker.ytd-masthead",
+            }, {
+                text: "Top bar",
+                input_id: "opt_topbar",
+                selector: "#container.ytd-masthead",
+            },
+        ],
+
+        presets: [
+            {
+                text: "Cozy",
+                input_id: "preset_cozy",
+            },
+        ],
+
+    };
+
     return {
 
         // Returns targets of specified index(es).
@@ -98,6 +121,18 @@ const dsfg = function () {
 
         fb_p_list: function () {
             return facebook.presets;
+        },
+
+        // Returns targets of specified index(es).
+        yt_t_list: function (indexes) {
+            if (!indexes || !indexes.length) {
+                return youtube.targets;
+            }
+            return youtube.targets.filter((t, i) => indexes.indexOf(i) > -1 );
+        },
+
+        yt_p_list: function () {
+            return youtube.presets;
         },
 
     };
@@ -225,7 +260,9 @@ function make_popup() {
     popup.id = "dsfg_popup";
     popup.className = "dsfg-popup";
 
-    const targets = site === "www.facebook.com" ? dsfg.fb_t_list() : null;
+    const targets = site === "www.facebook.com" ? dsfg.fb_t_list()
+        : site === "www.youtube.com" ? dsfg.yt_t_list()
+        : null;
 
     if (!targets || !targets.length) {
         status = "Error: No option found!";
@@ -241,7 +278,9 @@ function make_popup() {
         f_text: "Done",
     });
 
-    const presets = site === "www.facebook.com" ? dsfg.fb_p_list() : null;
+    const presets = site === "www.facebook.com" ? dsfg.fb_p_list()
+        : site === "www.youtube.com" ? dsfg.yt_p_list()
+        : null;
 
     if (!presets || !presets.length) {
         status = status || "Error: No preset found!";
@@ -261,7 +300,6 @@ function make_popup() {
     document.body.appendChild(popup);
 
     const css = document.createElement("style");
-    if (site === "www.facebook.com") {
         css.innerHTML = `
             .dsfg-popup {
                 background-color: #fff;
@@ -346,7 +384,6 @@ function make_popup() {
                 background-color: rgba(230, 230, 230, 0.7);
             }
         `;
-    }
     document.head.appendChild(css);
 
     return status;
@@ -370,9 +407,10 @@ function remove_elements() {
     let status = "";
 
     let cb_list = all_of_q(".dsfg-popup .home-panel .cb"),
-        s_list = dsfg.fb_t_list().map(function (opt) {
-            return opt.selector;
-        });
+        targets = site === "www.facebook.com" ? dsfg.fb_t_list()
+            : site === "www.youtube.com" ? dsfg.yt_t_list()
+            : null,
+        s_list = targets.map(opt => opt.selector);
 
     if (!cb_list || !cb_list.length) {
         status = "Error: Checkboxes not found!";
@@ -388,26 +426,35 @@ function remove_elements() {
 
         const target = document.querySelector(s_list[i]);
         if (!target) {
-            status = status || ("Element not found: " + dsfg.fb_t_list()[i].text);
+            status = status || ("Element not found: " + targets[i].text);
         }
 
         // Mostly remove target parts. Otherwise, modify some CSS.
-        switch (i) {
-            case 0:
-            case 1:
-            case 3:
-            case 4:
-            case 5:
-                target && target.remove();
-                break;
-            case 2:
-                if (target) {
-                    target.style.background = "none";
-                    target.style.borderBottom = "none";
-                }
-                const sb = target.querySelector("div[role='search']");
-                sb.style.border = "none";
-                break;
+        if (site === "www.facebook.com") {
+            switch (i) {
+                case 0:
+                case 1:
+                case 3:
+                case 4:
+                case 5:
+                    target && target.remove();
+                    break;
+                case 2:
+                    if (target) {
+                        target.style.background = "none";
+                        target.style.borderBottom = "none";
+                    }
+                    const sb = target.querySelector("div[role='search']");
+                    sb.style.border = "none";
+                    break;
+            }
+        } else if (site === "www.youtube.com") {
+            switch (i) {
+                case 0:
+                case 1:
+                    target && target.remove();
+                    break;
+            }
         }
 
     }
@@ -523,9 +570,91 @@ function disfigure_facebook() {
 
 
 
+// Main function to run on a YouTube page.
 function disfigure_youtube() {
 
-    // Remove pop-up container
-    all_of_q('ytd-popup-container').style.display = 'none';
+    let status = "";
+
+    if (id_of("dsfg_popup")) {
+        status = 'Pop-up exists or same element "id" in use!';
+        console.log(status);
+        return;
+    }
+
+    // Create pop-up and fill with site-specific options.
+    status = make_popup();
+    status && console.log(status);
+
+    const popup = id_of("dsfg_popup");
+    if (!popup) {
+        console.log(status || "Error: Something unexpected happened!");
+        return;
+    }
+
+    // Reveal the target panel and hide the others.
+    const show_panel = function (e) {
+
+        const home_panel = id_of("home_panel");
+        const presets_panel = id_of("presets_panel");
+        let next, past, name = e.target.innerText;
+
+        if (name === "Presets") {
+            next = presets_panel;
+            past = home_panel;
+        } else if (name === "Home") {
+            next = home_panel;
+            past = presets_panel;
+        }
+
+        next.classList.remove("collapsed");
+        past.classList.add("collapsed");
+
+    };
+
+    const pres_btn = id_of("presets_btn");
+    const pres_back_btn = id_of("presets_back_btn");
+    pres_btn.addEventListener("click", show_panel);
+    pres_back_btn.addEventListener("click", show_panel);
+
+    // Select corresponding Home panel options (checkboxes) when YouTube's
+    // "Cozy" preset is selected.
+    const toggle_cozy_options = function (e) {
+        uncheck_all_but(e.target);
+        const id_list = dsfg.yt_t_list().map(p => p.input_id);
+        id_list.forEach(id => {
+            const input = id_of(id);
+            input.checked = e.target.checked;
+        });
+    };
+
+    const preset_cozy = id_of("preset_cozy");
+    preset_cozy.addEventListener("change", toggle_cozy_options);
+
+    // When the "Done" button is clicked, remove selected options, remove
+    // preset EventListeners, and then remove the pop-up.
+    const remove_all_and_close = function () {
+
+        status = remove_elements();
+        status && console.log(status);
+
+        pres_btn.removeEventListener("click", show_panel);
+        pres_back_btn.removeEventListener("click", show_panel);
+        preset_cozy.removeEventListener("change", toggle_cozy_options);
+
+        // Remove EventListeners from all panels' "Done" buttons.
+        const done_btn_list = popup.querySelectorAll(".row.done-btn");
+        done_btn_list.forEach(function (done_btn) {
+            done_btn.removeEventListener("click", remove_all_and_close);
+        });
+
+        popup.remove();
+
+    };
+
+    // Listener for every panel's "Done" button.
+    const done_btn_list = popup.querySelectorAll(".row.done-btn");
+    done_btn_list.forEach(function (done_btn) {
+        done_btn.addEventListener("click", remove_all_and_close);
+    });
 
 }
