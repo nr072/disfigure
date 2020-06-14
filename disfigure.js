@@ -4,12 +4,8 @@ const site = location.host;
 
 const dsfg = {
     facebook: {
-        options: [
+        targets: [
             {
-                text: "All",
-                input_id: "opt_all",
-                selector: "",
-            }, {
                 text: "Notification jewel",
                 input_id: "opt_jewel",
                 selector: "#fbNotificationsJewel",
@@ -35,6 +31,12 @@ const dsfg = {
                 selector: "#pagelet_sidebar",
             },
         ],
+        presets: [
+            {
+                text: "All",
+                input_id: "preset_all",
+            },
+        ],
     },
 };
 
@@ -48,22 +50,26 @@ if (site === "www.facebook.com") {
 
 
 
-function create_option({input_id, text}) {
+function create_option({input_id, text, label_id}) {
 
-    let row = document.createElement("div"),
-        label = document.createElement("label"),
-        cb = document.createElement("input");
+    let row = document.createElement("div");
+    row.className = "row";
 
+    if (input_id) {
+        let cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.id = input_id;
+        cb.className = "cb";
+        row.appendChild(cb);
+    }
+
+    let label = document.createElement("label");
+    if (label_id) {
+        label.id = label_id;
+    }
     label.className = "opt";
     label.innerText = text;
-    label.setAttribute("for", input_id);
-
-    cb.type = "checkbox";
-    cb.id = input_id;
-    cb.className = "cb";
-
-    row.className = "row";
-    row.appendChild(cb);
+    input_id && label.setAttribute("for", input_id);
     row.appendChild(label);
 
     return row;
@@ -73,17 +79,55 @@ function create_option({input_id, text}) {
 
 
 // For "done" button, and other potential options in future.
-function create_special_row(name, text) {
+function create_special_row(name) {
     const row = document.createElement("div");
-    if (name === "done") {
-        row.id = "doneBtn";
-    }
+    row.id =
+        name === "Presets" ? "presets_btn"
+        : name === "Home" ? "presets_back_btn"
+        : name === "Done" ? "doneBtn"
+        : "";
     row.className =
-        name === "presets" ? "row preset-btn"
-        : name === "done" ? "row done"
+        name === "Presets" ? "row preset-btn"
+        : name === "Home" ? "row preset-btn"
+        : name === "Done" ? "row done"
         : "row";
-    row.innerText = text;
+    row.innerText = name;
     return row;
+}
+
+
+
+function create_panel({id, classes, h_text, options, f_text}) {
+
+    const panel = document.createElement("div");
+    panel.id = id;
+    panel.className = "panel";
+    classes.forEach(function (class_name) {
+        panel.classList.add(class_name);
+    });
+
+    const header = create_special_row(h_text);
+    panel.appendChild(header);
+
+    const optCont = document.createElement("div");
+    optCont.className = "opt-cont";
+    panel.appendChild(optCont);
+
+    // Create the options (removable part/element names). If option is a
+    // preset, do not pass input id. The <input> element will not be
+    // created.
+    for (let i = 0; i < options.length; ++i) {
+        optCont.appendChild(create_option({
+            text: options[i].text,
+            input_id: options[i].input_id,
+        }));
+    }
+
+    const footer = create_special_row(f_text);
+    panel.appendChild(footer);
+
+    return panel;
+
 }
 
 
@@ -97,34 +141,42 @@ function make_popup() {
     popup.id = "dsfg_popup";
     popup.className = "dsfg-popup";
 
-    const presetButton = create_special_row("presets", "Presets");
-    popup.appendChild(presetButton);
-
-    const optCont = document.createElement("div");
-    optCont.className = "opt-cont";
-    popup.appendChild(optCont);
-
-    const doneButton = create_special_row("done", "Done");
-    popup.appendChild(doneButton);
-
-    const options = site === "www.facebook.com"
-            ? dsfg.facebook.options
+    const targets = site === "www.facebook.com"
+            ? dsfg.facebook.targets
             : site === "www.youtube.com"
                 ? dsfg.youtube.options
                 : null;
 
-    if (options.length < 1) {
+    if (targets.length < 1) {
         logMessage = "Error: No option found!";
     }
 
-    // Create the options (removable part/element names).
-    for (let i = 0; i < options.length; ++i) {
-        optCont.appendChild(create_option({
-            text: options[i].text,
-            input_id: options[i].input_id,
-        }));
+    const home_panel = create_panel({
+        id: "home_panel",
+        classes: ["home-panel"],
+        h_text: "Presets",
+        options: targets,
+        f_text: "Done"
+    });
+
+    const presets = site === "www.facebook.com"
+            ? dsfg.facebook.presets
+            : null;
+
+    if (presets.length < 1) {
+        logMessage = "Error: No option found!";
     }
 
+    const presets_panel = create_panel({
+        id: "presets_panel",
+        classes: ["presets-panel", "collapsed"],
+        h_text: "Home",
+        options: presets,
+        f_text: "Done",
+    });
+
+    popup.appendChild(home_panel);
+    popup.appendChild(presets_panel);
     document.body.appendChild(popup);
 
     const css = document.createElement("style");
@@ -141,13 +193,24 @@ function make_popup() {
                 width: 180px;
                 z-index: 9999;
             }
+            .dsfg-popup .panel {
+                display: inline-block;
+                transition: width 0.3s cubic-bezier(0.5, 0, 0.7, 0.7);
+                width: 100%;
+            }
+            .dsfg-popup .panel.collapsed {
+                width: 0;
+            }
             .dsfg-popup .row,
             .dsfg-popup .opt {
                 color: #777;
+                overflow: hidden;
                 text-align: center;
             }
             .dsfg-popup .opt {
                 display: block;
+                height: 1rem;
+                margin-top: 2px;
                 padding: 0.5em 1em;
             }
             .dsfg-popup .row:hover,
@@ -173,6 +236,7 @@ function make_popup() {
             }
             .dsfg-popup .opt {
                 font-weight: normal;
+                line-height: 1.1rem;
                 padding: 0.5em 1em;
                 text-align: center;
             }
@@ -189,13 +253,34 @@ function make_popup() {
 
 
 
+function show_panel(name) {
+
+    const home_panel = document.getElementById("home_panel");
+    const presets_panel = document.getElementById("presets_panel");
+    let next, past;
+
+    if (name === "presets") {
+        next = presets_panel;
+        past = home_panel;
+    } else if (name === "home") {
+        next = home_panel;
+        past = presets_panel;
+    }
+
+    next.classList.remove("collapsed");
+    past.classList.add("collapsed");
+
+}
+
+
+
 // Remove parts/elements from page based on selected options.
 function remove_elements() {
 
     let logMessage = "";
 
-    let cbList = document.querySelectorAll(".dsfg-popup input.cb"),
-        sList = dsfg.facebook.options.map(function (opt) {
+    let cbList = document.querySelectorAll(".dsfg-popup .home-panel input.cb"),
+        sList = dsfg.facebook.targets.map(function (opt) {
             return opt.selector;
         });
 
@@ -204,8 +289,8 @@ function remove_elements() {
         return logMessage;
     }
 
-    // Remove elements corresponding to checkboxes, but skipping the "all".
-    for (let i = 1; i < cbList.length; ++i) {
+    // Remove elements corresponding to checkboxes.
+    for (let i = 0; i < cbList.length; ++i) {
 
         // Skip if option not selected.
         if (!cbList[i].checked) {
@@ -214,19 +299,19 @@ function remove_elements() {
 
         const el = document.querySelector(sList[i]);
         if (!el) {
-            const msg = "Element not found: " + dsfg.facebook.options[i].text;
+            const msg = "Element not found: " + dsfg.facebook.targets[i].text;
             logMessage = logMessage || msg;
         }
 
         switch (i) {
+            case 0:
             case 1:
-            case 2:
+            case 3:
             case 4:
             case 5:
-            case 6:
                 el && el.remove();
                 break;
-            case 3:
+            case 2:
                 if (el) {
                     el.style.background = "none";
                     el.style.borderBottom = "none";
@@ -262,22 +347,36 @@ function disfigure_facebook() {
     }
 
     // Select all options if the "all" option is selected.
-    const allOpt = document.getElementById("opt_all");
-    allOpt.addEventListener("change", function (e) {
+    const pres_btn = document.getElementById("presets_btn");
+    pres_btn.addEventListener("click", function () {
+        show_panel("presets");
+    });
+
+    // Select all options if the "all" option is selected.
+    const pres_back_btn = document.getElementById("presets_back_btn");
+    pres_back_btn.addEventListener("click", function () {
+        show_panel("home");
+    });
+
+    // Select all options if the "all" preset is selected.
+    const preset_all = document.getElementById("preset_all");
+    preset_all.addEventListener("change", function (e) {
         let cbList = document.querySelectorAll(".dsfg-popup input.cb");
-        for(let i = 1; i < cbList.length; ++i) {
+        for(let i = 0; i < cbList.length; ++i) {
             cbList[i].checked = e.target.checked;
         }
     });
 
     // Remove if options are selected, and close pop-up.
-    const doneBtn = document.getElementById("doneBtn");
-    doneBtn.addEventListener("click", function () {
-        logMessage = remove_elements();
-        if (logMessage) {
-            console.log(logMessage);
-        }
-        popup.remove();
+    const doneBtns = document.querySelectorAll(".row.done");
+    doneBtns.forEach(function (doneBtn) {
+        doneBtn.addEventListener("click", function () {
+            logMessage = remove_elements();
+            if (logMessage) {
+                console.log(logMessage);
+            }
+            popup.remove();
+        });
     });
 
 }
