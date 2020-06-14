@@ -246,8 +246,6 @@ to minify the code while creating the provided bookmarklet.
 
 - Addition:
   - Google spreadsheet: zoom messages
-  - Google Translate: upcoming changes
-- Site-specific colors (stalled due to lack of design sense)
 - Browser extension
 
 ### Miscellaneous
