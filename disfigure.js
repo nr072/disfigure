@@ -417,11 +417,9 @@ function make_popup() {
 
 
 
-// Uncheck all options and all presets except the passed parameter.
-function uncheck_all_but(clicked) {
-    let cb_list = all_of_q(".dsfg-popup input.cb");
+function uncheck_presets() {
+    let cb_list = all_of_q(".dsfg-popup .presets-panel input.cb");
     cb_list.forEach(cb => { cb.checked = false; });
-    clicked.checked = true;
 }
 
 
@@ -540,7 +538,7 @@ function disfigure_facebook() {
     // Select corresponding Home panel options (checkboxes) when the
     // "Sneaky" preset is selected.
     const toggle_sneaky_options = function (e) {
-        uncheck_all_but(e.target);
+        !e.target.checked && uncheck_presets();
         const id_list = dsfg.fb_t_list().map(p => p.input_id);
         id_list.forEach(id => {
             const input = id_of(id);
@@ -551,7 +549,7 @@ function disfigure_facebook() {
     // Select corresponding Home panel options (checkboxes) when the
     // "Chatty" preset is selected.
     const toggle_chatty_options = function (e) {
-        uncheck_all_but(e.target);
+        !e.target.checked && uncheck_presets();
         const id_list = dsfg.fb_t_list([0, 1, 2, 3, 5]).map(p => p.input_id);
         id_list.forEach(id => {
             const input = id_of(id);
@@ -563,6 +561,16 @@ function disfigure_facebook() {
     const preset_chatty = id_of("preset_chatty");
     preset_sneaky.addEventListener("change", toggle_sneaky_options);
     preset_chatty.addEventListener("change", toggle_chatty_options);
+
+    // Uncheck all presets if any Home panel option selection changes.
+    const option_change_listener = function () {
+        uncheck_presets();
+    }
+
+    const home_options = all_of_q(".dsfg-popup .home-panel .cb");
+    home_options.forEach(opt => {
+        opt.addEventListener("change", option_change_listener);
+    });
 
     // When the "Done" button is clicked, remove selected options, remove
     // preset EventListeners, and then remove the pop-up.
@@ -580,6 +588,10 @@ function disfigure_facebook() {
         const done_btn_list = popup.querySelectorAll(".row.done-btn");
         done_btn_list.forEach(function (done_btn) {
             done_btn.removeEventListener("click", remove_all_and_close);
+        });
+
+        home_options.forEach(opt => {
+            opt.removeEventListener("change", option_change_listener);
         });
 
         popup.remove();
@@ -645,7 +657,7 @@ function disfigure_youtube() {
     // Select corresponding Home panel options (checkboxes) when YouTube's
     // "Cozy" preset is selected.
     const toggle_cozy_options = function (e) {
-        uncheck_all_but(e.target);
+        !e.target.checked && uncheck_presets();
         const selections = [0, 1, 3, 4, 5, 6];
         const id_list = dsfg.yt_t_list(selections).map(p => p.input_id);
         id_list.forEach(id => {
@@ -657,7 +669,7 @@ function disfigure_youtube() {
     // Select corresponding Home panel options (checkboxes) when YouTube's
     // "Sneaky" preset is selected.
     const toggle_sneaky_options = function (e) {
-        uncheck_all_but(e.target);
+        !e.target.checked && uncheck_presets();
         const id_list = dsfg.yt_t_list([2]).map(p => p.input_id);
         id_list.forEach(id => {
             const input = id_of(id);
@@ -669,6 +681,16 @@ function disfigure_youtube() {
     const preset_sneaky = id_of("preset_sneaky");
     preset_cozy.addEventListener("change", toggle_cozy_options);
     preset_sneaky.addEventListener("change", toggle_sneaky_options);
+
+    // Uncheck all presets if any Home panel option selection changes.
+    const option_change_listener = function () {
+        uncheck_presets();
+    }
+
+    const home_options = all_of_q(".dsfg-popup .home-panel .cb");
+    home_options.forEach(opt => {
+        opt.addEventListener("change", option_change_listener);
+    });
 
     // When the "Done" button is clicked, remove selected options, remove
     // preset EventListeners, and then remove the pop-up.
@@ -685,6 +707,10 @@ function disfigure_youtube() {
         const done_btn_list = popup.querySelectorAll(".row.done-btn");
         done_btn_list.forEach(function (done_btn) {
             done_btn.removeEventListener("click", remove_all_and_close);
+        });
+
+        home_options.forEach(opt => {
+            opt.removeEventListener("change", option_change_listener);
         });
 
         popup.remove();
