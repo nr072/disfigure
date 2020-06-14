@@ -428,12 +428,19 @@ function make_popup() {
         return status;
     }
 
+    // Different hover colors for different sites, hopefully matching
+    // site theme colors.
+    const hover_color = dsfg.get_site() === "facebook" ? "40, 70, 125, 0.7"
+        : dsfg.get_site() === "youtube" ? "200, 0, 0, 0.7"
+        : "230, 230, 230, 0.7";
+
     const css = document.createElement("style");
     css.id = "dsfg_style";
     css.innerHTML = `
         .dsfg-popup {
+            --dsfg-hover-color: rgba(${ hover_color });
             background-color: #fff;
-            box-shadow: 0 0 1px 1px #ccc;
+            box-shadow: 0 0 4px -1px #666;
             font-size: 12px;
             height: 280px;
             left: 50%;
@@ -457,9 +464,12 @@ function make_popup() {
             overflow: hidden;
             text-align: center;
         }
+        .dsfg-popup .row:hover {
+            background-color: var(--dsfg-hover-color);
+        }
         .dsfg-popup .row:hover,
         .dsfg-popup .opt:hover {
-            background-color: rgba(230, 230, 230, 0.7);
+            color: #fff;
             cursor: pointer;
         }
         .dsfg-popup .top-btn,
@@ -493,6 +503,9 @@ function make_popup() {
             overflow-x: hidden;
             overflow-y: auto;
         }
+        .dsfg-popup .opt-cont .row {
+            margin-top: 2px;
+        }
         .dsfg-popup input.cb {
             display: none;
         }
@@ -500,12 +513,12 @@ function make_popup() {
             display: block;
             font-weight: normal;
             height: 12px;
-            margin-top: 2px;
             padding: 6px 12px;
             text-align: center;
         }
         .dsfg-popup input.cb:checked + .opt {
-            background-color: rgba(230, 230, 230, 0.7);
+            background-color: var(--dsfg-hover-color);
+            color: #fff;
         }
     `;
     document.head.appendChild(css);
