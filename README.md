@@ -137,18 +137,12 @@ the pop-up about upcoming changes is directly removed.
 
 ### How to Use It
 
-To use the code directly in the browser console,
-copy the content of "`disfigure.js`" and paste it in the console.
-Disfigure will activate.
-(Although, this way would be impractical if you wanted to use it more than once,
-since you would need to paste the code in the console every time.)
-
 To use the bookmarklet file ("`disfigure.txt`"),
 just add its content as a bookmarklet to your browser.
 
 If you want to make a bookmarklet yourself,
 see instructions
-[somewhere below](#how-to-make-a-bookmarklet).
+[somewhere below](#how-do-i-make-a-bookmarklet).
 
 #### Adding a bookmarklet to browser
 
@@ -173,11 +167,12 @@ Selected parts of the page will disappear.
 
 ### How It Works
 
-Disfigure removes the HTML code of the selected part from the page's HTML.
+Disfigure removes the HTML code of the selected part(s) from the page's HTML.
 Dead simple.
-
 (Except for Facebook's "bluebar"
 where it only changes the color to transparent.)
+
+The CSS selectors of the predefined parts are listed in the code.
 
 ### Upside
 
@@ -212,6 +207,7 @@ and is now afraid to change anything visual.
 
 - There is no button to deselect all options at once.
 Due to the developer's lack of basic design sense.
+Again.
 
   However, presets can be unchecked to deselect corresponding options,
 although that is not a very desirable solution.
@@ -221,18 +217,20 @@ although that is not a very desirable solution.
 - Disfigure should be used after the page has finished loading.
 Otherwise, unexpected parts (the main content!) may get removed.
 The CSS selectors that are used to identify targets are
-those that appear after the page is finished with all the DOM manipulation.
+those that appear after the page is _finished_ with all the DOM manipulation.
 
-- It is advised that the "Stingy" preset be used after the video has started loading.
+- It may become necessary, in some cases,
+to use the "Stingy" preset after the video has started loading.
 Otherwise, the `<script>` tags necessary to load it may get deleted.
 
-- Deleted parts may reappear if tab zoom changes
-(for example, the current playlist, if a playlist video is playing).
+- Deleted parts
+(for example, the current playlist, if a playlist video is playing)
+may reappear if tab zoom changes.
 
 - YouTube seems to insert tags into the HTML any time it wants.
 So, even after Disfigure has been used to strip the page down
-a number of parts may pop up
-(though they may not have any visual effect).
+a number of parts may pop up in the code
+(not making a visible appearance).
 
 ### Dependency
 
@@ -240,7 +238,7 @@ If the CSS selectors of the targeted parts ever change,
 those parts will not be removed
 until the selectors are updated.
 
-Since this deals with webpages,
+Since Disfigure deals with webpages,
 changes in HTML can be inconveniently frequent.
 
 ### Credit
@@ -271,7 +269,7 @@ The result is great but the process is ugly.
 Instead of gently hiding the offending parts
 and letting the site run as intended under the hood,
 the developer went for the
-what-the-hell-if-I-dont-need-it-lets-just-delete-it approach.
+what-the-hell-if-I-don't-need-it-let's-just-delete-it approach.
 
 This was a reason an alternative interpretation
 "Distraction-Free Interface by _Generally Unadvised_ Removal of Elements"
