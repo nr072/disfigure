@@ -22,6 +22,10 @@ const dsfg = {
                 input_id: "opt_search",
                 selector: "div[role='search'][data-testid='facebar_root']",
             }, {
+                text: "Page background",
+                input_id: "opt_pageBg",
+                selector: "#globalContainer",
+            }, {
                 text: "Chat tabs",
                 input_id: "opt_chTabs",
                 selector: "#pagelet_dock > .fbDockWrapperRight",
