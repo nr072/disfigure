@@ -164,6 +164,48 @@ const dsfg = function () {
 
 
 
+// Reveal the target panel and hide the others.
+const show_panel = function (e) {
+
+    const home_panel = id_of("home_panel");
+    const presets_panel = id_of("presets_panel");
+    let next, past, name = e.target.innerText;
+
+    if (name === "Presets") {
+        next = presets_panel;
+        past = home_panel;
+    } else if (name === "Home") {
+        next = home_panel;
+        past = presets_panel;
+    }
+
+    next.classList.remove("collapsed");
+    past.classList.add("collapsed");
+
+};
+
+
+
+const uncheck_presets = function () {
+    let cb_list = all_of_q(".dsfg-popup .presets-panel input.cb");
+    cb_list.forEach(cb => { cb.checked = false; });
+};
+
+
+
+// Check/uncheck corresponding Home panel options based on a preset
+// selection.
+const toggle_options = function (e, preset_indexes) {
+    !e.target.checked && uncheck_presets();
+    const id_list = dsfg.fb_t_list(preset_indexes).map(p => p.input_id);
+    id_list.forEach(id => {
+        const input = id_of(id);
+        input.checked = e.target.checked;
+    });
+};
+
+
+
 if (site === "www.facebook.com") {
     disfigure_facebook();
 } else if (site === "www.youtube.com") {
@@ -417,13 +459,6 @@ function make_popup() {
 
 
 
-function uncheck_presets() {
-    let cb_list = all_of_q(".dsfg-popup .presets-panel input.cb");
-    cb_list.forEach(cb => { cb.checked = false; });
-}
-
-
-
 // Remove parts of the webpage based on selected options (checkboxes).
 function remove_elements() {
 
@@ -510,51 +545,18 @@ function disfigure_facebook() {
         return;
     }
 
-    // Reveal the target panel and hide the others.
-    const show_panel = function (e) {
-
-        const home_panel = id_of("home_panel");
-        const presets_panel = id_of("presets_panel");
-        let next, past, name = e.target.innerText;
-
-        if (name === "Presets") {
-            next = presets_panel;
-            past = home_panel;
-        } else if (name === "Home") {
-            next = home_panel;
-            past = presets_panel;
-        }
-
-        next.classList.remove("collapsed");
-        past.classList.add("collapsed");
-
-    };
-
     const pres_btn = id_of("presets_btn");
     const pres_back_btn = id_of("presets_back_btn");
     pres_btn.addEventListener("click", show_panel);
     pres_back_btn.addEventListener("click", show_panel);
 
-    // Select corresponding Home panel options (checkboxes) when the
-    // "Sneaky" preset is selected.
+    // Select corresponding Home panel options (checkboxes) when a Facebook
+    // preset is selected.
     const toggle_sneaky_options = function (e) {
-        !e.target.checked && uncheck_presets();
-        const id_list = dsfg.fb_t_list().map(p => p.input_id);
-        id_list.forEach(id => {
-            const input = id_of(id);
-            input.checked = e.target.checked;
-        });
+        toggle_options(e);
     };
-
-    // Select corresponding Home panel options (checkboxes) when the
-    // "Chatty" preset is selected.
     const toggle_chatty_options = function (e) {
-        !e.target.checked && uncheck_presets();
-        const id_list = dsfg.fb_t_list([0, 1, 2, 3, 5]).map(p => p.input_id);
-        id_list.forEach(id => {
-            const input = id_of(id);
-            input.checked = e.target.checked;
-        });
+        toggle_options(e, [0, 1, 2, 3, 5]);
     };
 
     const preset_sneaky = id_of("preset_sneaky");
@@ -563,13 +565,9 @@ function disfigure_facebook() {
     preset_chatty.addEventListener("change", toggle_chatty_options);
 
     // Uncheck all presets if any Home panel option selection changes.
-    const option_change_listener = function () {
-        uncheck_presets();
-    }
-
     const home_options = all_of_q(".dsfg-popup .home-panel .cb");
     home_options.forEach(opt => {
-        opt.addEventListener("change", option_change_listener);
+        opt.addEventListener("change", uncheck_presets);
     });
 
     // When the "Done" button is clicked, remove selected options, remove
@@ -591,7 +589,7 @@ function disfigure_facebook() {
         });
 
         home_options.forEach(opt => {
-            opt.removeEventListener("change", option_change_listener);
+            opt.removeEventListener("change", uncheck_presets);
         });
 
         popup.remove();
@@ -629,52 +627,18 @@ function disfigure_youtube() {
         return;
     }
 
-    // Reveal the target panel and hide the others.
-    const show_panel = function (e) {
-
-        const home_panel = id_of("home_panel");
-        const presets_panel = id_of("presets_panel");
-        let next, past, name = e.target.innerText;
-
-        if (name === "Presets") {
-            next = presets_panel;
-            past = home_panel;
-        } else if (name === "Home") {
-            next = home_panel;
-            past = presets_panel;
-        }
-
-        next.classList.remove("collapsed");
-        past.classList.add("collapsed");
-
-    };
-
     const pres_btn = id_of("presets_btn");
     const pres_back_btn = id_of("presets_back_btn");
     pres_btn.addEventListener("click", show_panel);
     pres_back_btn.addEventListener("click", show_panel);
 
-    // Select corresponding Home panel options (checkboxes) when YouTube's
-    // "Cozy" preset is selected.
+    // Select corresponding Home panel options (checkboxes) when a YouTube
+    // preset is selected.
     const toggle_cozy_options = function (e) {
-        !e.target.checked && uncheck_presets();
-        const selections = [0, 1, 3, 4, 5, 6];
-        const id_list = dsfg.yt_t_list(selections).map(p => p.input_id);
-        id_list.forEach(id => {
-            const input = id_of(id);
-            input.checked = e.target.checked;
-        });
+        toggle_options(e, [0, 1, 3, 4, 5, 6]);
     };
-
-    // Select corresponding Home panel options (checkboxes) when YouTube's
-    // "Sneaky" preset is selected.
     const toggle_sneaky_options = function (e) {
-        !e.target.checked && uncheck_presets();
-        const id_list = dsfg.yt_t_list([2]).map(p => p.input_id);
-        id_list.forEach(id => {
-            const input = id_of(id);
-            input.checked = e.target.checked;
-        });
+        toggle_options(e, [2]);
     };
 
     const preset_cozy = id_of("preset_cozy");
@@ -683,13 +647,9 @@ function disfigure_youtube() {
     preset_sneaky.addEventListener("change", toggle_sneaky_options);
 
     // Uncheck all presets if any Home panel option selection changes.
-    const option_change_listener = function () {
-        uncheck_presets();
-    }
-
     const home_options = all_of_q(".dsfg-popup .home-panel .cb");
     home_options.forEach(opt => {
-        opt.addEventListener("change", option_change_listener);
+        opt.addEventListener("change", uncheck_presets);
     });
 
     // When the "Done" button is clicked, remove selected options, remove
@@ -710,7 +670,7 @@ function disfigure_youtube() {
         });
 
         home_options.forEach(opt => {
-            opt.removeEventListener("change", option_change_listener);
+            opt.removeEventListener("change", uncheck_presets);
         });
 
         popup.remove();
