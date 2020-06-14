@@ -140,6 +140,9 @@ const dsfg = function () {
             }, {
                 text: "Sneaky",
                 input_id: "preset_sneaky",
+            }, {
+                text: "Stingy",
+                input_id: "preset_stingy",
             },
         ],
 
@@ -615,7 +618,8 @@ function disfigure() {
 
     // Functions to check/uncheck corresponding Home panel options based on
     // a preset selection.
-    let toggle_sneaky_opts, toggle_chatty_opts, toggle_cozy_opts;
+    let toggle_sneaky_opts, toggle_chatty_opts, toggle_cozy_opts,
+        toggle_stingy_opts;
     if (site === "www.facebook.com") {
 
         toggle_sneaky_opts = function (e) {
@@ -633,15 +637,20 @@ function disfigure() {
         toggle_sneaky_opts = function (e) {
             toggle_options(e, [2]);
         };
+        toggle_stingy_opts = function (e) {
+            toggle_options(e, [8, 9]);
+        };
 
     }
 
     const sneaky_btn = id_of("preset_sneaky");
     const chatty_btn = id_of("preset_chatty");
     const cozy_btn = id_of("preset_cozy");
+    const stingy_btn = id_of("preset_stingy");
     sneaky_btn && sneaky_btn.addEventListener("change", toggle_sneaky_opts);
     chatty_btn && chatty_btn.addEventListener("change", toggle_chatty_opts);
     cozy_btn && cozy_btn.addEventListener("change", toggle_cozy_opts);
+    stingy_btn && stingy_btn.addEventListener("change", toggle_stingy_opts);
 
     // Uncheck all presets if any Home panel option selection changes.
     const home_options = all_of_q(".dsfg-popup .home-panel .cb");
@@ -662,6 +671,7 @@ function disfigure() {
         sneaky_btn && sneaky_btn.removeEventListener("change", toggle_sneaky_opts);
         chatty_btn && chatty_btn.removeEventListener("change", toggle_chatty_opts);
         cozy_btn && cozy_btn.removeEventListener("change", toggle_cozy_opts);
+        stingy_btn && stingy_btn.removeEventListener("change", toggle_stingy_opts);
 
         // Remove EventListeners from all panels' "Done" buttons.
         const done_btn_list = popup.querySelectorAll(".row.done-btn");
