@@ -182,7 +182,7 @@ function make_popup() {
 
     const targets = site === "www.facebook.com" ? dsfg.fb_t_list() : null;
 
-    if (!targets || targets.length) {
+    if (!targets || !targets.length) {
         status = "Error: No option found!";
     }
 
@@ -198,7 +198,7 @@ function make_popup() {
 
     const presets = site === "www.facebook.com" ? dsfg.fb_p_list() : null;
 
-    if (!presets || presets.length) {
+    if (!presets || !presets.length) {
         status = status || "Error: No preset found!";
     }
 
