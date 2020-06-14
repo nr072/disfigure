@@ -18,10 +18,6 @@ const dsfg = {
                 input_id: "opt_bar",
                 selector: "#bluebarRoot > div[role='banner']",
             }, {
-                text: "Bluebar search box",
-                input_id: "opt_search",
-                selector: "div[role='search'][data-testid='facebar_root']",
-            }, {
                 text: "Page background",
                 input_id: "opt_pageBg",
                 selector: "#globalContainer",
@@ -320,6 +316,8 @@ function remove_elements() {
                     el.style.background = "none";
                     el.style.borderBottom = "none";
                 }
+                const sb = el.querySelector("div[role='search']");
+                sb.style.border = "none";
                 break;
         }
 
