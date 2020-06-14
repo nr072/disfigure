@@ -116,7 +116,8 @@ const dsfg = function () {
             }, {
                 text: "Video details",
                 input_id: "opt_details",
-                selector: "#primary #meta.ytd-watch-flexy",
+                selector: "#primary #meta.ytd-watch-flexy && #primary #merch-shelf",
+                compound: true,
             }, {
                 text: "Pop-up",
                 input_id: "opt_popup",
@@ -617,10 +618,8 @@ function remove_elements() {
 
             const selectors = s_list[i].split("&&").map(s => s.trim());
 
-            if (t_list[i].input_id === "opt_body_extras") {
                 all_of_q(selectors[0]).forEach(tag => tag.remove());
                 all_of_q(selectors[1]).forEach(tag => tag.remove());
-            }
 
         }
 
