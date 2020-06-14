@@ -97,6 +97,26 @@ const dsfg = function () {
                 text: "Top bar",
                 input_id: "opt_topbar",
                 selector: "#container.ytd-masthead",
+            }, {
+                text: "Video and page titles",
+                input_id: "opt_title",
+                selector: "#primary #info.ytd-watch-flexy",
+            }, {
+                text: "Current playlist",
+                input_id: "opt_playlist",
+                selector: "#playlist",
+            }, {
+                text: "Video suggestions",
+                input_id: "opt_suggestions",
+                selector: "#related",
+            }, {
+                text: "Comments",
+                input_id: "opt_comments",
+                selector: "ytd-comments#comments",
+            }, {
+                text: "Video details",
+                input_id: "opt_details",
+                selector: "#primary #meta.ytd-watch-flexy",
             },
         ],
 
@@ -104,6 +124,9 @@ const dsfg = function () {
             {
                 text: "Cozy",
                 input_id: "preset_cozy",
+            }, {
+                text: "Sneaky",
+                input_id: "preset_sneaky",
             },
         ],
 
@@ -437,12 +460,14 @@ function remove_elements() {
             case 3:
             case 4:
             case 5:
+            case 6:
                 target && target.remove();
                 break;
 
             case 2:
                 if (site === "www.youtube.com") {
                     target && target.remove();
+                    document.title = "";
                 }
                 else if (site === "www.facebook.com") {
                     if (target) {
@@ -619,7 +644,19 @@ function disfigure_youtube() {
     // "Cozy" preset is selected.
     const toggle_cozy_options = function (e) {
         uncheck_all_but(e.target);
-        const id_list = dsfg.yt_t_list().map(p => p.input_id);
+        const selections = [0, 1, 3, 4, 5, 6];
+        const id_list = dsfg.yt_t_list(selections).map(p => p.input_id);
+        id_list.forEach(id => {
+            const input = id_of(id);
+            input.checked = e.target.checked;
+        });
+    };
+
+    // Select corresponding Home panel options (checkboxes) when YouTube's
+    // "Sneaky" preset is selected.
+    const toggle_sneaky_options = function (e) {
+        uncheck_all_but(e.target);
+        const id_list = dsfg.yt_t_list([2]).map(p => p.input_id);
         id_list.forEach(id => {
             const input = id_of(id);
             input.checked = e.target.checked;
@@ -627,7 +664,9 @@ function disfigure_youtube() {
     };
 
     const preset_cozy = id_of("preset_cozy");
+    const preset_sneaky = id_of("preset_sneaky");
     preset_cozy.addEventListener("change", toggle_cozy_options);
+    preset_sneaky.addEventListener("change", toggle_sneaky_options);
 
     // When the "Done" button is clicked, remove selected options, remove
     // preset EventListeners, and then remove the pop-up.
