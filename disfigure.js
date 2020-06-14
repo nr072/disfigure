@@ -38,6 +38,9 @@ const dsfg = function () {
             {
                 text: "Sneaky",
                 input_id: "preset_sneaky",
+            }, {
+                text: "Chatty",
+                input_id: "preset_chatty",
             },
         ],
 
@@ -400,6 +403,15 @@ function disfigure_facebook() {
     const preset_sneaky = document.getElementById("preset_sneaky");
     preset_sneaky.addEventListener("change", function (e) {
         const id_list = dsfg.fb_t_list().map(p => p.input_id);
+        id_list.forEach(id => {
+            const input = document.getElementById(id);
+            input.checked = e.target.checked;
+        });
+    });
+
+    const preset_chatty = document.getElementById("preset_chatty");
+    preset_chatty.addEventListener("change", function (e) {
+        const id_list = dsfg.fb_t_list([0, 1, 2, 3, 5]).map(p => p.input_id);
         id_list.forEach(id => {
             const input = document.getElementById(id);
             input.checked = e.target.checked;
