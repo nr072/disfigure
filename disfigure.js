@@ -168,6 +168,8 @@ if (site === "www.facebook.com") {
     disfigure_facebook();
 } else if (site === "www.youtube.com") {
     disfigure_youtube();
+} else {
+    console.log("Warning: Disfigure does not support this address!");
 }
 
 
