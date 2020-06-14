@@ -113,7 +113,7 @@ function create_special_row(name) {
     const row = document.createElement("div");
     row.id = name === "Presets" ? "presets_btn"
         : name === "Home" ? "presets_back_btn"
-        : name === "Done" ? "doneBtn"
+        : name === "Done" ? ""
         : "";
     row.className = name === "Presets" ? "row preset-btn"
         : name === "Home" ? "row preset-btn"
@@ -297,24 +297,24 @@ function remove_elements() {
 
     let status = "";
 
-    let cbList = document.querySelectorAll(".dsfg-popup .home-panel .cb"),
-        sList = dsfg.fb_t_list().map(function (opt) {
+    let cb_list = document.querySelectorAll(".dsfg-popup .home-panel .cb"),
+        s_list = dsfg.fb_t_list().map(function (opt) {
             return opt.selector;
         });
 
-    if (!cbList || !cbList.length) {
+    if (!cb_list || !cb_list.length) {
         status = "Error: Checkboxes not found!";
         return status;
     }
 
     // Check which checkboxes are checked, and remove corresponding parts.
-    for (let i = 0; i < cbList.length; ++i) {
+    for (let i = 0; i < cb_list.length; ++i) {
 
-        if (!cbList[i].checked) {
+        if (!cb_list[i].checked) {
             continue;
         }
 
-        const target = document.querySelector(sList[i]);
+        const target = document.querySelector(s_list[i]);
         if (!target) {
             status = status || ("Element not found: " + dsfg.fb_t_list()[i].text);
         }
@@ -432,9 +432,9 @@ function disfigure_facebook() {
         preset_chatty.removeEventListener("change", toggle_chatty_options);
 
         // Remove EventListeners from all panels' "Done" buttons.
-        const doneBtns = popup.querySelectorAll(".row.done");
-        doneBtns.forEach(function (doneBtn) {
-            doneBtn.removeEventListener("click", remove_all_and_close);
+        const done_btn_list = popup.querySelectorAll(".row.done");
+        done_btn_list.forEach(function (done_btn) {
+            done_btn.removeEventListener("click", remove_all_and_close);
         });
 
         popup.remove();
@@ -442,9 +442,9 @@ function disfigure_facebook() {
     };
 
     // Listener for every panel's "Done" button.
-    const doneBtns = popup.querySelectorAll(".row.done");
-    doneBtns.forEach(function (doneBtn) {
-        doneBtn.addEventListener("click", remove_all_and_close);
+    const done_btn_list = popup.querySelectorAll(".row.done");
+    done_btn_list.forEach(function (done_btn) {
+        done_btn.addEventListener("click", remove_all_and_close);
     });
 
 }
