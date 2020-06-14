@@ -45,6 +45,7 @@ const dsfg = function () {
 
     return {
 
+        // Returns targets of specified indexes.
         fb_t_list: function (indexes) {
             if (indexes && indexes.length > 0) {
                 return facebook.targets.filter((t, i) => { indexes.indexOf(i) > -1 });
@@ -53,6 +54,7 @@ const dsfg = function () {
             }
         },
 
+        // Returns presets of specified indexes.
         fb_p_list: function (indexes) {
             if (indexes && indexes.length > 0) {
                 return facebook.presets.filter((t, i) => { indexes.indexOf(i) > -1 });
@@ -75,11 +77,15 @@ if (site === "www.facebook.com") {
 
 
 
+// Create the clickable options that correspond to different parts of the
+// webpage (excluding the top ("Presets", "Home") and the bottom ("Done")
+// buttons).
 function create_option({input_id, text, label_id}) {
 
     let row = document.createElement("div");
     row.className = "row";
 
+    // Create a checkbox <input> and add it before the <label> element.
     if (input_id) {
         let cb = document.createElement("input");
         cb.type = "checkbox";
@@ -88,6 +94,8 @@ function create_option({input_id, text, label_id}) {
         row.appendChild(cb);
     }
 
+    // The <label> element comes after the <input> so that a checked <input>
+    // can easily affect the appearance of its corresponding <label>.
     let label = document.createElement("label");
     if (label_id) {
         label.id = label_id;
@@ -103,16 +111,14 @@ function create_option({input_id, text, label_id}) {
 
 
 
-// For "done" button, and other potential options in future.
+// Create the top and the bottom buttons.
 function create_special_row(name) {
     const row = document.createElement("div");
-    row.id =
-        name === "Presets" ? "presets_btn"
+    row.id = name === "Presets" ? "presets_btn"
         : name === "Home" ? "presets_back_btn"
         : name === "Done" ? "doneBtn"
         : "";
-    row.className =
-        name === "Presets" ? "row preset-btn"
+    row.className = name === "Presets" ? "row preset-btn"
         : name === "Home" ? "row preset-btn"
         : name === "Done" ? "row done"
         : "row";
@@ -122,25 +128,29 @@ function create_special_row(name) {
 
 
 
+// Create the sliding panels.
 function create_panel({id, classes, h_text, options, f_text}) {
 
     const panel = document.createElement("div");
     panel.id = id;
     panel.className = "panel";
+
+    // Add the panel-specific class names.
     classes.forEach(function (class_name) {
         panel.classList.add(class_name);
     });
 
+    // the top button ("Presets", "Home").
     const header = create_special_row(h_text);
     panel.appendChild(header);
 
+    // The container for the main options - the ones that correspond to
+    // different parts of the webpage.
     const optCont = document.createElement("div");
     optCont.className = "opt-cont";
     panel.appendChild(optCont);
 
-    // Create the options (removable part/element names). If option is a
-    // preset, do not pass input id. The <input> element will not be
-    // created.
+    // Create the main options.
     for (let i = 0; i < options.length; ++i) {
         optCont.appendChild(create_option({
             text: options[i].text,
@@ -148,6 +158,7 @@ function create_panel({id, classes, h_text, options, f_text}) {
         }));
     }
 
+    // The bottom ("Done") button.
     const footer = create_special_row(f_text);
     panel.appendChild(footer);
 
@@ -160,38 +171,35 @@ function create_panel({id, classes, h_text, options, f_text}) {
 // Create the pop-up, add options, and add CSS to page's HTML.
 function make_popup() {
 
-    let logMessage = "";
+    let status = "";
 
     const popup = document.createElement("div");
     popup.id = "dsfg_popup";
     popup.className = "dsfg-popup";
 
-    const targets = site === "www.facebook.com"
-            ? dsfg.fb_t_list()
-            : site === "www.youtube.com"
-                ? dsfg.youtube.options
-                : null;
+    const targets = site === "www.facebook.com" ? dsfg.fb_t_list() : null;
 
-    if (targets.length < 1) {
-        logMessage = "Error: No option found!";
+    if (!targets || targets.length) {
+        status = "Error: No option found!";
     }
 
+
+    // Create the panel with the main options.
     const home_panel = create_panel({
         id: "home_panel",
         classes: ["home-panel"],
         h_text: "Presets",
         options: targets,
-        f_text: "Done"
+        f_text: "Done",
     });
 
-    const presets = site === "www.facebook.com"
-            ? dsfg.fb_p_list()
-            : null;
+    const presets = site === "www.facebook.com" ? dsfg.fb_p_list() : null;
 
-    if (presets.length < 1) {
-        logMessage = "Error: No option found!";
+    if (!presets || presets.length) {
+        status = status || "Error: No preset found!";
     }
 
+    // Create the panel with the presets, hidden by default.
     const presets_panel = create_panel({
         id: "presets_panel",
         classes: ["presets-panel", "collapsed"],
@@ -272,12 +280,13 @@ function make_popup() {
     }
     document.head.appendChild(css);
 
-    return logMessage;
+    return status;
 
 }
 
 
 
+// Reveal the target panel and hide the others.
 function show_panel(name) {
 
     const home_panel = document.getElementById("home_panel");
@@ -299,109 +308,110 @@ function show_panel(name) {
 
 
 
-// Remove parts/elements from page based on selected options.
+// Remove parts of the webpage based on selected options (checkboxes).
 function remove_elements() {
 
-    let logMessage = "";
+    let status = "";
 
-    let cbList = document.querySelectorAll(".dsfg-popup .home-panel input.cb"),
+    let cbList = document.querySelectorAll(".dsfg-popup .home-panel .cb"),
         sList = dsfg.fb_t_list().map(function (opt) {
             return opt.selector;
         });
 
-    if (!cbList.length) {
-        logMessage = "Error: Checkboxes not found!";
-        return logMessage;
+    if (!cbList || !cbList.length) {
+        status = "Error: Checkboxes not found!";
+        return status;
     }
 
-    // Remove elements corresponding to checkboxes.
+    // Check which checkboxes are checked, and remove corresponding parts.
     for (let i = 0; i < cbList.length; ++i) {
 
-        // Skip if option not selected.
         if (!cbList[i].checked) {
             continue;
         }
 
-        const el = document.querySelector(sList[i]);
-        if (!el) {
-            const msg = "Element not found: " + dsfg.fb_t_list()[i].text;
-            logMessage = logMessage || msg;
+        const target = document.querySelector(sList[i]);
+        if (!target) {
+            status = status || ("Element not found: " + dsfg.fb_t_list()[i].text);
         }
 
+        // Mostly remove target parts. Otherwise, modify some CSS.
         switch (i) {
             case 0:
             case 1:
             case 3:
             case 4:
             case 5:
-                el && el.remove();
+                target && target.remove();
                 break;
             case 2:
-                if (el) {
-                    el.style.background = "none";
-                    el.style.borderBottom = "none";
+                if (target) {
+                    target.style.background = "none";
+                    target.style.borderBottom = "none";
                 }
-                const sb = el.querySelector("div[role='search']");
+                const sb = target.querySelector("div[role='search']");
                 sb.style.border = "none";
                 break;
         }
 
     }
 
-    return logMessage;
+    return status;
 
 }
 
 
 
+// Main function to run on a Facebook page.
 function disfigure_facebook() {
 
-    // To show error or log-like messages to user in console.
-    let logMessage = "";
+    let status = "";
 
-    if (document.getElementById('dsfg_popup')) {
-        console.log('Pop-up exists or same "id" in use!');
+    if (document.getElementById("dsfg_popup")) {
+        status = 'Pop-up exists or same element "id" in use!';
+        console.log(status);
         return;
     }
 
     // Create pop-up and fill with site-specific options.
-    logMessage = make_popup();
+    status = make_popup();
+    status && console.log(status);
 
     const popup = document.getElementById("dsfg_popup");
     if (!popup) {
-        console.log(logMessage || "Error: Something unexpected happened!");
+        console.log(status || "Error: Something unexpected happened!");
         return;
     }
 
-    // Select all options if the "all" option is selected.
+    // Hide the Home panel and open the Presets panel when the "Presets"
+    // button is clicked.
     const pres_btn = document.getElementById("presets_btn");
     pres_btn.addEventListener("click", function () {
         show_panel("presets");
     });
 
-    // Select all options if the "all" option is selected.
+    // Hide the Presets panel and open the Home panel when the "Home"
+    // button is clicked.
     const pres_back_btn = document.getElementById("presets_back_btn");
     pres_back_btn.addEventListener("click", function () {
         show_panel("home");
     });
 
-    // Select all options if the "all" preset is selected.
+    // Select all options if the "All" preset is selected.
     const preset_all = document.getElementById("preset_all");
     preset_all.addEventListener("change", function (e) {
-        let cbList = document.querySelectorAll(".dsfg-popup input.cb");
+        let cbList = popup.querySelectorAll(".home-panel input.cb");
         for(let i = 0; i < cbList.length; ++i) {
             cbList[i].checked = e.target.checked;
         }
     });
 
     // Remove if options are selected, and close pop-up.
-    const doneBtns = document.querySelectorAll(".row.done");
+    const doneBtns = popup.querySelectorAll(".row.done");
     doneBtns.forEach(function (doneBtn) {
         doneBtn.addEventListener("click", function () {
-            logMessage = remove_elements();
-            if (logMessage) {
-                console.log(logMessage);
-            }
+            status = remove_elements();
+            status && console.log(status);
             popup.remove();
         });
     });
