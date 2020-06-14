@@ -241,7 +241,7 @@ const toggle_options = function (e, preset_indexes) {
             ? dsfg.yt_t_list(preset_indexes).map(p => p.input_id)
             : null;
 
-    id_list || console.log("Error: Home panel options not found!");
+    id_list || console.log("[Disfigure] Error: Home panel options not found!");
     id_list.forEach(id => {
         const input = id_of(id);
         input.checked = e.target.checked;
@@ -255,7 +255,7 @@ site === "www.facebook.com" || site === "www.youtube.com"
     ? disfigure()
     : site === "translate.google.com"
         ? remove_single("g_transl")
-        : console.log("Warning: Disfigure does not support this address!");
+        : console.log("[Disfigure] Warning: Disfigure does not support this address!");
 
 
 
@@ -375,7 +375,7 @@ function make_popup() {
         : null;
 
     if (!t_list || !t_list.length) {
-        status = "Error: No option found!";
+        status = "[Disfigure] Error: No option found!";
     }
 
 
@@ -393,7 +393,7 @@ function make_popup() {
         : null;
 
     if (!presets || !presets.length) {
-        status = status || "Error: No preset found!";
+        status = status || "[Disfigure] Error: No preset found!";
     }
 
     // Create the panel with the presets, hidden by default.
@@ -516,7 +516,7 @@ function remove_elements() {
         s_list = t_list.map(opt => opt.selector);
 
     if (!cb_list || !cb_list.length) {
-        status = "Error: Checkboxes not found!";
+        status = "[Disfigure] Error: Checkboxes not found!";
         return status;
     }
 
@@ -535,7 +535,7 @@ function remove_elements() {
             // Check if corresponding parts exist.
             const targets = all_of_q(s_list[i]);
             if (!targets || !targets.length) {
-                status = status || ("Element not found: " + t_list[i].text);
+                status = status || ("[Disfigure] Target not found: " + t_list[i].text);
             }
 
             // Mostly remove target parts. Otherwise, modify some CSS.
@@ -596,7 +596,7 @@ function disfigure() {
     let status = "";
 
     if (id_of("dsfg_popup")) {
-        status = 'Pop-up exists or same element "id" in use!';
+        status = '[Disfigure] Warning: Pop-up exists or same tag "id" in use!';
         console.log(status);
         return;
     }
@@ -607,7 +607,7 @@ function disfigure() {
 
     const popup = id_of("dsfg_popup");
     if (!popup) {
-        console.log(status || "Error: Something unexpected happened!");
+        console.log(status || "[Disfigure] Error: Something unexpected happened!");
         return;
     }
 
