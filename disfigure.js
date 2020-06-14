@@ -132,6 +132,18 @@ const dsfg = function () {
 
     };
 
+    const g_transl = {
+
+        targets: [
+            {
+                text: "Pop-up",
+                input_id: "opt_popup",
+                selector: ".container .notification-area",
+            },
+        ],
+
+    };
+
     return {
 
         // Returns targets of specified index(es).
@@ -156,6 +168,14 @@ const dsfg = function () {
 
         yt_p_list: function () {
             return youtube.presets;
+        },
+
+        // Returns targets of specified index(es).
+        gt_t_list: function (indexes) {
+            if (!indexes || !indexes.length) {
+                return g_transl.targets;
+            }
+            return g_transl.targets.filter((t, i) => indexes.indexOf(i) > -1 );
         },
 
     };
@@ -217,7 +237,9 @@ const toggle_options = function (e, preset_indexes) {
 
 site === "www.facebook.com" || site === "www.youtube.com"
     ? disfigure()
-    : console.log("Warning: Disfigure does not support this address!");
+    : site === "translate.google.com"
+        ? remove_single("g_transl")
+        : console.log("Warning: Disfigure does not support this address!");
 
 
 
@@ -628,4 +650,16 @@ function disfigure() {
         done_btn.addEventListener("click", remove_all_and_close);
     });
 
+}
+
+
+
+// If there is only one part of the webpage that needs to be removed, just
+// remove it. No need to create a pop-up.
+function remove_single(name) {
+    let target;
+    if (name === "g_transl") {
+        target = all_of_q(dsfg.gt_t_list()[0].selector)[0];
+    }
+    target.remove();
 }
