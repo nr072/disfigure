@@ -371,7 +371,15 @@ function make_popup() {
     popup.appendChild(presets_panel);
     document.body.appendChild(popup);
 
+    // Do not add CSS if a <style> tag already exists (from any previous
+    // activation).
+    const old_css = id_of("dsfg_style");
+    if (old_css) {
+        return status;
+    }
+
     const css = document.createElement("style");
+    css.id = "dsfg_style";
     css.innerHTML = `
         .dsfg-popup {
             background-color: #fff;
