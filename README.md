@@ -207,6 +207,12 @@ or pressing the "Escape" key.
 the developer went too far ahead without such a button first,
 and is now afraid to change anything visual.
 
+- There is no button to deselect all options at once.
+Due to the developer's lack of basic design sense.
+
+  However, presets can be unchecked to deselect corresponding options,
+although that is not a very desirable solution.
+
 #### YouTube-specific
 
 - Disfigure should be used after the page has finished loading.
@@ -214,7 +220,7 @@ Otherwise, unexpected parts (the main content!) may get removed.
 The CSS selectors that are used to identify targets are
 those that appear after the page is finished with all the DOM manipulation.
 
-- The "Stingy" preset must be used after the video has started loading.
+- It is advised that the "Stingy" preset be used after the video has started loading.
 Otherwise, the `<script>` tags necessary to load it may get deleted.
 
 - Deleted parts may reappear if tab zoom changes
