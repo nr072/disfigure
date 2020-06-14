@@ -283,6 +283,15 @@ function make_popup() {
 
 
 
+// Uncheck all options and all presets except the passed parameter.
+function uncheck_all_but(clicked) {
+    let cb_list = document.querySelectorAll(".dsfg-popup input.cb");
+    cb_list.forEach(cb => { cb.checked = false; });
+    clicked.checked = true;
+}
+
+
+
 // Remove parts of the webpage based on selected options (checkboxes).
 function remove_elements() {
 
@@ -386,6 +395,7 @@ function disfigure_facebook() {
     // Select corresponding Home panel options (checkboxes) when the
     // "Sneaky" preset is selected.
     const toggle_sneaky_options = function (e) {
+        uncheck_all_but(e.target);
         const id_list = dsfg.fb_t_list().map(p => p.input_id);
         id_list.forEach(id => {
             const input = document.getElementById(id);
@@ -396,6 +406,7 @@ function disfigure_facebook() {
     // Select corresponding Home panel options (checkboxes) when the
     // "Chatty" preset is selected.
     const toggle_chatty_options = function (e) {
+        uncheck_all_but(e.target);
         const id_list = dsfg.fb_t_list([0, 1, 2, 3, 5]).map(p => p.input_id);
         id_list.forEach(id => {
             const input = document.getElementById(id);
