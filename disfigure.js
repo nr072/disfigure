@@ -196,23 +196,28 @@ const uncheck_presets = function () {
 // Check/uncheck corresponding Home panel options based on a preset
 // selection.
 const toggle_options = function (e, preset_indexes) {
+
     !e.target.checked && uncheck_presets();
-    const id_list = dsfg.fb_t_list(preset_indexes).map(p => p.input_id);
+
+    const id_list = site === "www.facebook.com"
+        ? dsfg.fb_t_list(preset_indexes).map(p => p.input_id)
+        : site === "www.youtube.com"
+            ? dsfg.yt_t_list(preset_indexes).map(p => p.input_id)
+            : null;
+
+    id_list || console.log("Error: Home panel options not found!");
     id_list.forEach(id => {
         const input = id_of(id);
         input.checked = e.target.checked;
     });
+
 };
 
 
 
-if (site === "www.facebook.com") {
-    disfigure_facebook();
-} else if (site === "www.youtube.com") {
-    disfigure_youtube();
-} else {
-    console.log("Warning: Disfigure does not support this address!");
-}
+site === "www.facebook.com" || site === "www.youtube.com"
+    ? disfigure()
+    : console.log("Warning: Disfigure does not support this address!");
 
 
 
@@ -524,8 +529,9 @@ function remove_elements() {
 
 
 
-// Main function to run on a Facebook page.
-function disfigure_facebook() {
+// Main function. Creates pop-up, and adds EventListeners to all options/
+// presets/buttons.
+function disfigure() {
 
     let status = "";
 
@@ -535,7 +541,7 @@ function disfigure_facebook() {
         return;
     }
 
-    // Create pop-up and fill with site-specific options.
+    // Create pop-up and fill with options.
     status = make_popup();
     status && console.log(status);
 
@@ -545,24 +551,40 @@ function disfigure_facebook() {
         return;
     }
 
-    const pres_btn = id_of("presets_btn");
-    const pres_back_btn = id_of("presets_back_btn");
-    pres_btn.addEventListener("click", show_panel);
-    pres_back_btn.addEventListener("click", show_panel);
+    const presets_btn = id_of("presets_btn");
+    const presets_back_btn = id_of("presets_back_btn");
+    presets_btn.addEventListener("click", show_panel);
+    presets_back_btn.addEventListener("click", show_panel);
 
-    // Select corresponding Home panel options (checkboxes) when a Facebook
-    // preset is selected.
-    const toggle_sneaky_options = function (e) {
-        toggle_options(e);
-    };
-    const toggle_chatty_options = function (e) {
-        toggle_options(e, [0, 1, 2, 3, 5]);
-    };
+    // Functions to check/uncheck corresponding Home panel options based on
+    // a preset selection.
+    let toggle_sneaky_opts, toggle_chatty_opts, toggle_cozy_opts;
+    if (site === "www.facebook.com") {
 
-    const preset_sneaky = id_of("preset_sneaky");
-    const preset_chatty = id_of("preset_chatty");
-    preset_sneaky.addEventListener("change", toggle_sneaky_options);
-    preset_chatty.addEventListener("change", toggle_chatty_options);
+        toggle_sneaky_opts = function (e) {
+            toggle_options(e);
+        };
+        toggle_chatty_opts = function (e) {
+            toggle_options(e, [0, 1, 2, 3, 5]);
+        };
+
+    } else if (site === "www.youtube.com") {
+
+        toggle_cozy_opts = function (e) {
+            toggle_options(e, [0, 1, 3, 4, 5, 6]);
+        };
+        toggle_sneaky_opts = function (e) {
+            toggle_options(e, [2]);
+        };
+
+    }
+
+    const sneaky_btn = id_of("preset_sneaky");
+    const chatty_btn = id_of("preset_chatty");
+    const cozy_btn = id_of("preset_cozy");
+    sneaky_btn && sneaky_btn.addEventListener("change", toggle_sneaky_opts);
+    chatty_btn && chatty_btn.addEventListener("change", toggle_chatty_opts);
+    cozy_btn && cozy_btn.addEventListener("change", toggle_cozy_opts);
 
     // Uncheck all presets if any Home panel option selection changes.
     const home_options = all_of_q(".dsfg-popup .home-panel .cb");
@@ -577,91 +599,12 @@ function disfigure_facebook() {
         status = remove_elements();
         status && console.log(status);
 
-        pres_btn.removeEventListener("click", show_panel);
-        pres_back_btn.removeEventListener("click", show_panel);
-        preset_sneaky.removeEventListener("change", toggle_sneaky_options);
-        preset_chatty.removeEventListener("change", toggle_chatty_options);
-
-        // Remove EventListeners from all panels' "Done" buttons.
-        const done_btn_list = popup.querySelectorAll(".row.done-btn");
-        done_btn_list.forEach(function (done_btn) {
-            done_btn.removeEventListener("click", remove_all_and_close);
-        });
-
-        home_options.forEach(opt => {
-            opt.removeEventListener("change", uncheck_presets);
-        });
-
-        popup.remove();
-
-    };
-
-    // Listener for every panel's "Done" button.
-    const done_btn_list = popup.querySelectorAll(".row.done-btn");
-    done_btn_list.forEach(function (done_btn) {
-        done_btn.addEventListener("click", remove_all_and_close);
-    });
-
-}
-
-
-
-// Main function to run on a YouTube page.
-function disfigure_youtube() {
-
-    let status = "";
-
-    if (id_of("dsfg_popup")) {
-        status = 'Pop-up exists or same element "id" in use!';
-        console.log(status);
-        return;
-    }
-
-    // Create pop-up and fill with site-specific options.
-    status = make_popup();
-    status && console.log(status);
-
-    const popup = id_of("dsfg_popup");
-    if (!popup) {
-        console.log(status || "Error: Something unexpected happened!");
-        return;
-    }
-
-    const pres_btn = id_of("presets_btn");
-    const pres_back_btn = id_of("presets_back_btn");
-    pres_btn.addEventListener("click", show_panel);
-    pres_back_btn.addEventListener("click", show_panel);
-
-    // Select corresponding Home panel options (checkboxes) when a YouTube
-    // preset is selected.
-    const toggle_cozy_options = function (e) {
-        toggle_options(e, [0, 1, 3, 4, 5, 6]);
-    };
-    const toggle_sneaky_options = function (e) {
-        toggle_options(e, [2]);
-    };
-
-    const preset_cozy = id_of("preset_cozy");
-    const preset_sneaky = id_of("preset_sneaky");
-    preset_cozy.addEventListener("change", toggle_cozy_options);
-    preset_sneaky.addEventListener("change", toggle_sneaky_options);
-
-    // Uncheck all presets if any Home panel option selection changes.
-    const home_options = all_of_q(".dsfg-popup .home-panel .cb");
-    home_options.forEach(opt => {
-        opt.addEventListener("change", uncheck_presets);
-    });
-
-    // When the "Done" button is clicked, remove selected options, remove
-    // preset EventListeners, and then remove the pop-up.
-    const remove_all_and_close = function () {
-
-        status = remove_elements();
-        status && console.log(status);
-
-        pres_btn.removeEventListener("click", show_panel);
-        pres_back_btn.removeEventListener("click", show_panel);
-        preset_cozy.removeEventListener("change", toggle_cozy_options);
+        // Remove EventListeners from all presets.
+        presets_btn.removeEventListener("click", show_panel);
+        presets_back_btn.removeEventListener("click", show_panel);
+        sneaky_btn && sneaky_btn.removeEventListener("change", toggle_sneaky_opts);
+        chatty_btn && chatty_btn.removeEventListener("change", toggle_chatty_opts);
+        cozy_btn && cozy_btn.removeEventListener("change", toggle_cozy_opts);
 
         // Remove EventListeners from all panels' "Done" buttons.
         const done_btn_list = popup.querySelectorAll(".row.done-btn");
