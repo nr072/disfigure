@@ -686,21 +686,8 @@ function disfigure() {
         opt.addEventListener("change", uncheck_presets);
     });
 
-    // Close pop-up if the "Escape" key is pressed.
-    const close_on_escape = function (e) {
-        if (e.key === "Escape") {
-            remove_all_and_close();
-        }
-    };
-
-    document.addEventListener("keydown", close_on_escape);
-
-    // When the "Done" button is clicked, remove selected options, remove
-    // preset EventListeners, and then remove the pop-up.
-    const remove_all_and_close = function () {
-
-        status = remove_elements();
-        status && console.log(status);
+    // Remove all EventListeners.
+    const remove_event_listeners = function () {
 
         // Remove EventListeners from all presets.
         presets_btn.removeEventListener("click", show_panel);
@@ -722,8 +709,25 @@ function disfigure() {
             opt.removeEventListener("change", uncheck_presets);
         });
 
-        popup.remove();
+    };
 
+    // Close pop-up if the "Escape" key is pressed.
+    const close_on_escape = function (e) {
+        if (e.key === "Escape") {
+            remove_event_listeners();
+            popup.remove();
+        }
+    };
+
+    document.addEventListener("keydown", close_on_escape);
+
+    // When the "Done" button is clicked, remove targets based on selected
+    // options, remove all EventListeners, and then close the pop-up.
+    const remove_all_and_close = function () {
+        status = remove_elements();
+        status && console.log(status);
+        remove_event_listeners();
+        popup.remove();
     };
 
     // Listener for every panel's "Done" button.
