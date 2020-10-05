@@ -1,4 +1,8 @@
-# DisFIGURE
+# Disfigure
+
+**Warning:
+This is no longer working on Facebook,
+since Facebook's UI changed in September, 2020.**
 
 Disfigure (DIStraction-Free Interface by Great-but-Ugly Removal of Elements),
 by temporarily removing undesirable parts of a website,
