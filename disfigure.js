@@ -172,13 +172,12 @@ const dsfg = function () {
         // Get site name for compatible sites/URLs.
         get_site: function () {
             const host = location.host;
-            return host === "www.facebook.com"
-                ? "facebook"
-                : host === "www.youtube.com"
-                    ? (location.pathname === "/watch" ? "youtube" : null)
-                    : host === "translate.google.com"
-                        ? "g_transl"
-                        : null;
+            return (
+                host === "www.facebook.com" ? "facebook"
+                : host === "www.youtube.com" ? "youtube"
+                : host === "translate.google.com" ? "g_transl"
+                : null
+            );
         },
 
         // Returns targets of specified index(es).
