@@ -96,17 +96,14 @@ const dsfg = function () {
                 input_id: "opt_ticker",
                 selector: "#ticker.ytd-masthead"
             }, {
-                text: "Top bar",
+                text: "Top-bar",
                 input_id: "opt_topbar",
                 selector: "#container.ytd-masthead"
             }, {
-                text: "Video and page titles",
-                input_id: "opt_title",
-                selector: "#primary #info.ytd-watch-flexy"
-            }, {
-                text: "Current playlist",
-                input_id: "opt_playlist",
-                selector: "#playlist"
+                text: "Pop-ups",
+                input_id: "opt_popup",
+                selector: "paper-dialog.ytd-popup-container && ytd-consent-bump-lightbox",
+                compound: true
             }, {
                 text: "Video suggestions",
                 input_id: "opt_suggestions",
@@ -116,14 +113,22 @@ const dsfg = function () {
                 input_id: "opt_comments",
                 selector: "ytd-comments#comments"
             }, {
+                text: "Current playlist",
+                input_id: "opt_playlist",
+                selector: "#playlist"
+            }, {
+                text: "Live chat",
+                input_id: "opt_live_chat",
+                selector: "ytd-live-chat-frame"
+            }, {
+                text: "Video and page titles",
+                input_id: "opt_title",
+                selector: "#primary #info.ytd-watch-flexy"
+            }, {
                 text: "Video details",
                 input_id: "opt_details",
                 selector: "#primary #meta.ytd-watch-flexy && #primary #merch-shelf",
                 compound: true
-            }, {
-                text: "Pop-up",
-                input_id: "opt_popup",
-                selector: "paper-dialog.ytd-popup-container"
             }, {
                 text: "Video overlay ad",
                 input_id: "opt_video_ad",
@@ -682,13 +687,13 @@ function disfigure() {
     } else if (dsfg.get_site() === "youtube") {
 
         toggle_cozy_opts = function (e) {
-            toggle_options(e, [0, 1, 3, 4, 5, 6, 7, 8]);
+            toggle_options(e, [0, 1, 2, 3, 4, 5, 6, 8, 9]);
         };
         toggle_sneaky_opts = function (e) {
-            toggle_options(e, [2]);
+            toggle_options(e, [7]);
         };
         toggle_stingy_opts = function (e) {
-            toggle_options(e, [9, 10]);
+            toggle_options(e, [10, 11]);
         };
 
     }
