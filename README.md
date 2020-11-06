@@ -54,37 +54,28 @@ to select and remove predefined parts of a few particular websites:
 
 - Facebook options:
 
-  1. **Notification jewel:**
-Appears in the topbar,
-to the right of the icons for friend requests and chat messages.
-
-  2. **Notification card:**
+  1. **Notification card:**
 Pops up from bottom left.
 Corresponding notifications are considered seen/checked if hovered.
 
-  3. **Bluebar:**
-The blue topbar.
+  2. **Search box:**
+Top-bar search box.
 
-  4. **Page background:**
+  3. **Tob-bar logo**
+
+  4. **Tob-bar**
+
+  5. **Tob-bar others**
+
+  6. **Page background:**
 Distracting details in case of the "Chatty" preset.
 Could be page's main content!
 Use this cautiously.
 
-  5. **Chat tabs:**
-Opens from bottom right, with one tab per conversation.
-
-  6. **Sidebar:**
-Appears on the right in full-screen view
-(or if screen width is sufficient enough).
-Shows game suggestions, and online/offline friends and conversations.
-
-- Facebook presets:
+- Facebook preset:
 
   - **Sneaky:**
 Combines options 1–6.
-
-  - **Chatty:**
-All options except 5.
 
 - YouTube options:
 
@@ -92,48 +83,52 @@ All options except 5.
 Displayed if some update in the policy has not been checked out by the user yet.
 Appears above even the topbar.
 
-  2. **Top bar**
+  2. **Top-bar**
 
-  3. **Video and page titles:**
-Video name, date, and numbers of view, like, and dislike, etc.
-
-  4. **Current playlist:**
-Displayed if current video is part of a playlist.
-
-  5. **Video suggestions**
-
-  6. **Comments**
-
-  7. **Video details**
-Uploader name, subscribe button, and video description and other details.
-
-  8. **Pop-up:**
+  3. **Pop-up:**
 May or may not appear,
 asking for user experience feedback,
 or advertising YouTube TV or YouTube Premium.
 
-  9. **Video overlay ad:**
-Advertisements that appear on the video.
+  4. **Video suggestions**
+Includes the "up next" video, and the auto-play button.
 
-  10. **Extra tags in `<head>`:**
+  5. **Comments**
+
+  6. **Current playlist:**
+Shows up if current video is part of a playlist.
+
+  7. **Live chat:**
+Chat section for live videos.
+
+  8. **Video & page titles:**
+Tab name (the value of the &laquo;title&raquo; tag); video name and date; numbers of views, likes, and dislikes, etc.
+
+  9. **Video details**
+Uploader name, subscribe button, video description, and other details.
+
+  10. **Video overlay ad:**
+Advertisements that appear over the video.
+
+  11. **Extra tags in `<head>`:**
 HTML tags inside `<head>` that are not visually essential for watching a video.
 
-  11. **Extra tags in `<body>`:**
+  12. **Extra tags in `<body>`:**
 HTML tags inside `<body>` that are not visually essential for watching a video.
 
 - YouTube presets:
 
   - **Cozy:**
-Combines options 1, 2, 4–9.
+Combines options 1–7, 9, 10.
 
   - **Sneaky:**
-Option 3.
+Option 8.
 
   - **Stingy:**
-Options 10 and 11.
+Options 11 and 12.
 
 - For Google Translate,
-the pop-up about upcoming changes is directly removed.
+just the pop-up about upcoming changes is directly removed.
 
 ### How to Use It
 
