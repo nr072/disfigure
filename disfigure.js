@@ -179,6 +179,7 @@ const dsfg = function () {
             const host = location.host;
             return (
                 host === "www.facebook.com" ? "facebook"
+                : host === "web.facebook.com" ? "facebook"
                 : host === "www.youtube.com" ? "youtube"
                 : host === "translate.google.com" ? "g_transl"
                 : null
