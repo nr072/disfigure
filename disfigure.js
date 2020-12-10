@@ -48,41 +48,43 @@ const dsfg = function () {
 
         targets: [
             {
-                text: "Notification jewel",
-                input_id: "opt_jewel",
-                selector: "#fbNotificationsJewel",
-            }, {
                 text: "Notification card",
                 input_id: "opt_card",
-                selector: "#pagelet_dock > ._2xwp",
+                selector: ".lfi1tu6t.p7hjln8o.poy2od1o.re5koujm.kavbgo14 && .advert.post-ads + div:not([id])",
+                compound: true
             }, {
-                text: "Bluebar",
-                input_id: "opt_bar",
-                selector: "#bluebarRoot > div[role='banner']",
+                text: "Search box",
+                input_id: "opt_searchbox",
+                selector: "div[role='banner'] > .poy2od1o.kr520xx4.j9ispegn.ehxjyohh.dhix69tm.bp9cbjyn"
+            }, {
+                text: "Top-bar logo",
+                input_id: "opt_logo",
+                selector: "div[role='banner'] > .q10oee1b.poy2od1o.ooia0uwo.kavbgo14.byvelhso"
+            }, {
+                text: "Top-bar",
+                input_id: "opt_topbar",
+                selector: "div[role='banner'] > .tkr6xdv7.poy2od1o.n7fi1qx3.j9ispegn"
+            }, {
+                text: "Top-bar others",
+                input_id: "opt_topbar_others",
+                selector: "div[role='banner'] > .poy2od1o.hv4rvrfc.ehxjyohh.b3onmgus > div[role='navigation'] > :nth-child(4) && div[role='banner'] > .poy2od1o.hv4rvrfc.ehxjyohh.b3onmgus > div[role='navigation'] > :nth-child(3) svg && div[role='banner'] > .poy2od1o.hv4rvrfc.ehxjyohh.b3onmgus > div[role='navigation'] > :nth-child(2) && div[role='banner'] > .poy2od1o.hv4rvrfc.ehxjyohh.b3onmgus > div[role='navigation'] > :nth-child(1)",
+                compound: true
             }, {
                 text: "Page background",
                 input_id: "opt_pageBg",
-                selector: "#globalContainer",
-            }, {
-                text: "Chat tabs",
-                input_id: "opt_chTabs",
-                selector: "#pagelet_dock > .fbDockWrapperRight",
-            }, {
-                text: "Sidebar",
-                input_id: "opt_sidebar",
-                selector: "#pagelet_sidebar",
-            },
+                selector: "div[role='banner'] ~ .rq0escxv.l9j0dhe7.du4w35lb"
+            }
         ],
 
         presets: [
             {
                 text: "Sneaky",
-                input_id: "preset_sneaky",
-            }, {
-                text: "Chatty",
-                input_id: "preset_chatty",
-            },
-        ],
+                input_id: "preset_sneaky"
+            // }, {
+            //     text: "Chatty",
+            //     input_id: "preset_chatty"
+            }
+        ]
 
     };
 
@@ -92,64 +94,64 @@ const dsfg = function () {
             {
                 text: "Policy review",
                 input_id: "opt_ticker",
-                selector: "#ticker.ytd-masthead",
+                selector: "#ticker.ytd-masthead"
             }, {
                 text: "Top bar",
                 input_id: "opt_topbar",
-                selector: "#container.ytd-masthead",
+                selector: "#container.ytd-masthead"
             }, {
                 text: "Video and page titles",
                 input_id: "opt_title",
-                selector: "#primary #info.ytd-watch-flexy",
+                selector: "#primary #info.ytd-watch-flexy"
             }, {
                 text: "Current playlist",
                 input_id: "opt_playlist",
-                selector: "#playlist",
+                selector: "#playlist"
             }, {
                 text: "Video suggestions",
                 input_id: "opt_suggestions",
-                selector: "#related",
+                selector: "#related"
             }, {
                 text: "Comments",
                 input_id: "opt_comments",
-                selector: "ytd-comments#comments",
+                selector: "ytd-comments#comments"
             }, {
                 text: "Video details",
                 input_id: "opt_details",
                 selector: "#primary #meta.ytd-watch-flexy && #primary #merch-shelf",
-                compound: true,
+                compound: true
             }, {
                 text: "Pop-up",
                 input_id: "opt_popup",
-                selector: "paper-dialog.ytd-popup-container",
+                selector: "paper-dialog.ytd-popup-container"
             }, {
                 text: "Video overlay ad",
                 input_id: "opt_video_ad",
-                selector: ".video-ads.ytp-ad-module",
+                selector: ".video-ads.ytp-ad-module"
             }, {
                 text: "Extra tags in <head>",
                 input_id: "opt_head_extras",
-                selector: "head > :not(#player-css):not(div):not(#dsfg_style):not([name='searchbox'])",
+                selector: "head > :not(#player-css):not(div):not(#dsfg_style):not([name='searchbox'])"
             }, {
                 text: "Extra tags in <body>",
                 input_id: "opt_body_extras",
                 selector: "body > :not(ytd-app) && body > ytd-app > :not(#content)",
-                compound: true,
-            },
+                compound: true
+            }
         ],
 
         presets: [
             {
                 text: "Cozy",
-                input_id: "preset_cozy",
+                input_id: "preset_cozy"
             }, {
                 text: "Sneaky",
-                input_id: "preset_sneaky",
+                input_id: "preset_sneaky"
             }, {
                 text: "Stingy",
-                input_id: "preset_stingy",
-            },
-        ],
+                input_id: "preset_stingy"
+            }
+        ]
 
     };
 
@@ -159,9 +161,9 @@ const dsfg = function () {
             {
                 text: "Pop-up",
                 input_id: "opt_popup",
-                selector: ".container .notification-area",
-            },
-        ],
+                selector: ".container .notification-area"
+            }
+        ]
 
     };
 
@@ -209,7 +211,7 @@ const dsfg = function () {
                 return g_transl.targets;
             }
             return g_transl.targets.filter((t, i) => indexes.indexOf(i) > -1 );
-        },
+        }
 
     };
 
@@ -364,7 +366,7 @@ function create_panel({id, classes, h_text, options, f_text}) {
     for (let i = 0; i < options.length; ++i) {
         optCont.appendChild(create_option({
             text: options[i].text,
-            input_id: options[i].input_id,
+            input_id: options[i].input_id
         }));
     }
 
@@ -402,7 +404,7 @@ function make_popup() {
         classes: ["home-panel"],
         h_text: "Presets",
         options: t_list,
-        f_text: "Done",
+        f_text: "Done"
     });
 
     const presets = dsfg.get_site() === "facebook" ? dsfg.fb_p_list()
@@ -419,7 +421,7 @@ function make_popup() {
         classes: ["presets-panel", "collapsed"],
         h_text: "Home",
         options: presets,
-        f_text: "Done",
+        f_text: "Done"
     });
 
     popup.appendChild(home_panel);
@@ -618,8 +620,9 @@ function remove_elements() {
 
             const selectors = s_list[i].split("&&").map(s => s.trim());
 
-                all_of_q(selectors[0]).forEach(tag => tag.remove());
-                all_of_q(selectors[1]).forEach(tag => tag.remove());
+            selectors.forEach(selector => {
+                all_of_q(selector).forEach(tag => tag.remove());
+            });
 
         }
 
@@ -667,6 +670,11 @@ function disfigure() {
 
         toggle_sneaky_opts = function (e) {
             toggle_options(e);
+            document.head.getElementsByTagName("title")[0].innerText = "404";
+            document.body.style.backgroundColor = "burlywood";
+            const style = document.createElement("style");
+            style.innerHTML = "html{--notification-badge:blue !important}*{border-radius:0 !important}";
+            document.head.appendChild(style);
         };
         toggle_chatty_opts = function (e) {
             toggle_options(e, [0, 1, 2, 3, 5]);
