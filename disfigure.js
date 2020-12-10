@@ -675,12 +675,38 @@ function disfigure() {
 
         toggle_sneaky_opts = function (e) {
             toggle_options(e);
-            document.head.getElementsByTagName("title")[0].innerText = "404";
+
+            /* Extended version features start here. */
+
+            const intendedTitle = "404";
+            document.title = intendedTitle;
+
             document.body.style.backgroundColor = "burlywood";
             const style = document.createElement("style");
             style.innerHTML = "html{--notification-badge:blue !important}*{border-radius:0 !important}";
             document.head.appendChild(style);
+
+            // Facebook shows the number of unread notifications in the
+            // document title. Every time Facebook does that, replace it
+            // with the intended title.
+            const callback = function(mutationsList, observer) {
+                for(const mutation of mutationsList) {
+                    if (mutation.type === 'childList') {
+                        if (document.title !== intendedTitle) {
+                            document.title = intendedTitle;
+                        }
+                    }
+                }
+            };
+            const observer = new MutationObserver(callback);
+            const target = document.head.getElementsByTagName("title")[0];
+            const options = { childList: true };
+            observer.observe(target, options);
+
+            /* Extended version features end here. */
+
         };
+
         toggle_chatty_opts = function (e) {
             toggle_options(e, [0, 1, 2, 3, 5]);
         };
