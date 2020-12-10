@@ -639,6 +639,56 @@ function remove_elements() {
 
 
 
+
+/*
+    --------------------------------------------------------------------
+    Extended edition code starts here
+    --------------------------------------------------------------------
+*/
+
+// Change background colors of messages in the chat tab.
+let changeChatColors = () => {
+
+    let allLength = 0;
+
+    // Every second, check if new messages appeared in the chat tab. If
+    // yes, change their colors.
+    return setInterval(() => {
+
+        // Determine if new messages have appeared by counting matching
+        // elements.
+        let all = document.querySelectorAll('.tw6a2znq.stjgntxs.sj5x9vvc.qv66sw1b.odn2s2vf.ljqsnud1.l60d2q6s.d1544ag0');
+        if (all.length != allLength) {
+            allLength = all.length;
+
+            // Apply different background colors to outgoing and incoming
+            // messages, since their text colors are different.
+            all.forEach(msg => {
+                if (msg.style.background != "burlywood") {
+                    msg.style.background = "burlywood";
+                }
+            });
+            let outs = document.querySelectorAll('[data-testid="outgoing_message"] > .tw6a2znq.stjgntxs.sj5x9vvc.qv66sw1b.odn2s2vf.ljqsnud1.l60d2q6s.d1544ag0');
+            outs.forEach(msg => {
+                if (msg.style.background != "brown") {
+                    msg.style.background = "brown";
+                }
+            });
+
+        }
+
+    }, 1000);
+
+};
+
+/*
+    --------------------------------------------------------------------
+    Extended edition code ends here
+    --------------------------------------------------------------------
+*/
+
+
+
 // Main function. Creates pop-up, and adds EventListeners to all options/
 // presets/buttons.
 function disfigure() {
@@ -676,14 +726,18 @@ function disfigure() {
         toggle_sneaky_opts = function (e) {
             toggle_options(e);
 
-            /* Extended version features start here. */
+            /*
+                --------------------------------------------------------
+                Extended edition code starts here
+                --------------------------------------------------------
+            */
 
             const intendedTitle = "404";
             document.title = intendedTitle;
 
             document.body.style.backgroundColor = "burlywood";
             const style = document.createElement("style");
-            style.innerHTML = "html{--notification-badge:blue !important}*{border-radius:0 !important}";
+            style.innerHTML = "html{--notification-badge:brown !important}*{border-radius:0 !important}";
             document.head.appendChild(style);
 
             // Facebook shows the number of unread notifications in the
@@ -703,7 +757,33 @@ function disfigure() {
             const options = { childList: true };
             observer.observe(target, options);
 
-            /* Extended version features end here. */
+            // Change chat colors if chat tab is open.
+            // Check and change chat color every second. Check if the chat
+            // tab is open every minute.
+            let chatTab = document.querySelector('[data-testid="mwchat-tab"]');
+            let interval;
+            if (chatTab) {
+                interval = changeChatColors();
+            }
+            setInterval(() => {
+                chatTab = document.querySelector('[data-testid="mwchat-tab"]');
+                if (!chatTab) {
+                    if (interval) {
+                        clearInterval(interval);
+                        interval = null;
+                    }
+                } else {
+                    if (!interval) {
+                        interval = changeChatColors();
+                    }
+                }
+            }, 60000);
+
+            /*
+                --------------------------------------------------------
+                Extended edition code ends here
+                --------------------------------------------------------
+            */
 
         };
 
