@@ -661,18 +661,18 @@ let changeChatColors = () => {
         if (all.length != allLength) {
             allLength = all.length;
 
-            // Apply different background colors to outgoing and incoming
-            // messages, since their text colors are different.
+            // Same background color as page is applied to messages.
             all.forEach(msg => {
                 if (msg.style.background != "burlywood") {
                     msg.style.background = "burlywood";
                 }
             });
-            let outs = document.querySelectorAll('[data-testid="outgoing_message"] > .tw6a2znq.stjgntxs.sj5x9vvc.qv66sw1b.odn2s2vf.ljqsnud1.l60d2q6s.d1544ag0');
+
+            // The text color is changed to a dark color since white on
+            // 'burlywood' hurts the eyes.
+            let outs = document.querySelectorAll('[data-testid="outgoing_message"] .tw6a2znq.stjgntxs.sj5x9vvc.qv66sw1b.odn2s2vf.ljqsnud1.l60d2q6s.d1544ag0');
             outs.forEach(msg => {
-                if (msg.style.background != "brown") {
-                    msg.style.background = "brown";
-                }
+                msg.childNodes[0].style.color = "#333";
             });
 
         }
