@@ -738,26 +738,32 @@ function disfigure() {
             document.body.style.backgroundColor = "burlywood";
             const style = document.createElement("style");
             style.innerHTML = `
-                html {
+                * {
                     --notification-badge: brown !important;
                     --accent:brown !important;
-                }
-                * {
                     border-radius:0 !important;
                 }
-                /* Images sent in chat need a minimum width to be clicked on easily */
-                .sf5mxxl7.aczr3vle.opwvks06.hop1g133.linmgsc8.t63ysoy8.soycq5t1.e72ty7fz.qmr60zad.qlfml3jp.inkptoze a img {
-                    min-width: 10px;
+
+                /* Images sent/received in chat need a minimum width to be clicked on easily */
+                .j83agx80.cbu4d94t a.q9uorilb.nhd2j8a9.l9j0dhe7.mg4g778l.f1sip0of img {
+                    min-width: 20px;
                 }
+                /* Reposition image's overlay so it can be clicked */
+                .j83agx80.cbu4d94t .j83agx80.cbu4d94t .soycq5t1.sf5mxxl7 + .pmk7jnqg.kr520xx4.j9ispegn {
+                    z-index: -1;
+                }
+
                 /* Chat tab background color will match page background */
                 .ue3kfks5.stjgntxs.pw54ja7n.nred35xi.ni8dbmo4.mrjvor2e.la0exbxb.kwja4m9d.jbcpqwzg.eu4i7hue {
                     --messenger-card-background: burlywood;
                 }
+
                 /* Chat tabs will have no shadow */
                 .ue3kfks5.stjgntxs.pw54ja7n.nred35xi.ni8dbmo4.mrjvor2e.la0exbxb.kwja4m9d.jbcpqwzg.eu4i7hue,
                 .tn0ko95a.stjgntxs.rlauoc8d.nred35xi.ni8dbmo4.m7zwrmfr.cmqm4kv0.b7h9ocf4.abiwlrkh {
                     box-shadow: none;
                 }
+
                 /* Chat dropdown background color will match page background */
                 [role=banner] .r57mb794.ofs802cu.ni8dbmo4.l56l04vs.kh7kg01d.k4xni2cv.eg9m0zos.c3g1iek1 > .j83agx80.cbu4d94t.buofh1pr.l9j0dhe7,
                 [role=banner] .j83agx80.cbu4d94t.h77mwsce.dp1hu0rb.o36gj0jk.h58bhtfz > .pzdrnzhu.ihqw7lf3.jyxxhhb5 {
