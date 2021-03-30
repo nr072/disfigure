@@ -102,7 +102,7 @@ const dsfg = function () {
             }, {
                 text: "Pop-ups",
                 input_id: "opt_popup",
-                selector: "paper-dialog.ytd-popup-container && ytd-consent-bump-lightbox",
+                selector: "ytd-popup-container && ytd-consent-bump-lightbox",
                 compound: true
             }, {
                 text: "Video suggestions",
